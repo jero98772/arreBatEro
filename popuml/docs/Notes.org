@@ -1,0 +1,19 @@
+* Notes
+** uml string format
+arrow
+name
+==
+<+,-> name:type
+...
+==
+<+,-> name:type
+
+   https://i.stack.imgur.com/2ajCN.gif
+** start langues
+   python
+   java
+   c++
+** in
+   img or text with format uml and programing langue
+** out
+   code 
