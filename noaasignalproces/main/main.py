@@ -1,45 +1,49 @@
+#https://medium.com/swlh/decoding-noaa-satellite-images-using-50-lines-of-code-3c5d1d0a08da
 import scipy.io.wavfile as wav
 import scipy.signal as signal
 import numpy as np
-from PIL import Image
-import matplotlib.pyplot as plt
-#fs, data = wav.read('noaa15.wav')
-#fs, data = wav.read('https://jthatch.com/NOAA-15-0530.wav')
-data_crop = data[20*fs:21*fs]
-plt.figure(figsize=(12,4))
-plt.plot(data_crop)
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
-plt.title("Signal")
-plt.show()
+from flask import Flask, render_template,redirect,request
+import datetime
+import time
 
-resample = 4
-data = data[::resample]
-fs = fs//resample
+SAVESFOLDER="saves/"
+
+app=Flask(__name__)
+
 
 def hilbert(data):
     analytical_signal = signal.hilbert(data)
     amplitude_envelope = np.abs(analytical_signal)
     return amplitude_envelope
-data_am = hilbert(data)
+#data_am = hilbert(data)
+def cleardata(name):
+    print(name)
+    fs, data = wav.read(SAVESFOLDER+name)
+    resample = 4
+    data = data[::resample]
+    fs = fs//resample
+    print("error?2")
+    data_am = hilbert(data)
+    return data_am ,fs
 
-frame_width = int(0.5*fs)
-w, h = frame_width, data_am.shape[0]//frame_width
-image = Image.new('RGB', (w, h))
-px, py = 0, 0
-for p in range(data_am.shape[0]):
-    lum = int(data_am[p]//32 - 32)
-    if lum < 0: lum = 0
-    if lum > 255: lum = 255
-    image.putpixel((px, py), (0, lum, 0))
-    px += 1
-    if px >= w:
-        if (py % 50) == 0:
-            print(f"Line saved {py} of {h}")
-        px = 0
-        py += 1
-        if py >= h:
-            break
-image = image.resize((w, 4*h))
-plt.imshow(image)
-plt.show()
+@app.route("/",methods=['GET','POST'])
+def main():
+    if request.method == 'POST':
+        name="wavnoaa"+str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","").replace(".","")+".wav"
+        file = request.files["file"]
+        file.save(SAVESFOLDER+name)
+        time.sleep(3)
+        print("redirect")
+        return redirect("out/"+name)
+    return render_template("index.html")
+
+@app.route("/out/<string:name>")
+def out(name):
+    #data_crop = data[20*fs:21*fs]
+    print("error?")
+    data_am,fs=cleardata(name)
+    #print("error?")
+    print(data_am)
+    return render_template("out.html",hilbertData=list(data_am),fs=fs)
+if __name__ == '__main__':
+    app.run(debug=True,host="0.0.0.0",port=9600)

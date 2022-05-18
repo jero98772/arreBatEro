@@ -40,6 +40,7 @@ for p in range(data_am.shape[0]):
         py += 1
         if py >= h:
             break
+print(image)
 image = image.resize((w, 4*h))
 plt.imshow(image)
 plt.show()
