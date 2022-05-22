@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+	<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<title>noaa signal process</title>
+	<py-env>
+		- numpy
+		- matplotlib
+		- scipy
+		- PIL
+	</py-env>
+</head>
+<body>
+	<h1>Noaa siganal processing</h1>
+	<label>input file</label>
+	<input type="file">
+	<input type="text" name="urlNoaa">
+	<br>
+<py-repl id="my-repl"  auto-generate="true">data_am = {{ hilbertData }} </py-repl>
+
+	<py-script>
+from PIL import Image
+import matplotlib.pyplot as plt
+
+
+frame_width = int(0.5*{{ fs }})
+w, h = frame_width, data_am.shape[0]//frame_width
+image = Image.new('RGB', (w, h))
+px, py = 0, 0
+for p in range(data_am.shape[0]):
+    lum = int(data_am[p]//32 - 32)
+    if lum < 0: lum = 0
+    if lum > 255: lum = 255
+    image.putpixel((px, py), (0, lum, 0))
+    px += 1
+    if px >= w:
+        if (py % 50) == 0:
+            print(f"Line saved {py} of {h}")
+        px = 0
+        py += 1
+        if py >= h:
+            break
+image = image.resize((w, 4*h))
+plt.imshow(image)
+plt.show()
+
+	</py-script>
+</body>
+</html>
