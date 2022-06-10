@@ -1,5 +1,6 @@
 * Notes
 ** uml string format
+
 arrow
 name
 ==
@@ -7,6 +8,12 @@ name
 ...
 ==
 <+,-> name:type
+
+inheritance -> name class
+==
+atributes
+==
+functios
 
    https://i.stack.imgur.com/2ajCN.gif
 ** start langues

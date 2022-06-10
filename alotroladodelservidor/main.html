@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+	<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<title>noaa signal process</title>
+
+    <py-env>
+      - pydeck
+      - pandas
+      - networkx
+    </py-env>
+</head>
+<body>
+
+	<py-script>
+import pandas as pd
+import pydeck as pdk
+import networkx as nx
+data=pd.read_csv("https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/proyecto/codigo/alOtroLado/data/calles_de_medellin_con_acoso.csv",sep=";")
+graph=nx.Graph()
+for i in range(len(data)):
+	node=data["node"][i]
+	weight=(data["length"][i])
+	graph.add_edge(str(data["edges"][i][0]),str(data["edges"][i][1]),weight=weight)
+	self.graph.add_node(str(node))
+data	
+</py-script>
+</body>
+</html>

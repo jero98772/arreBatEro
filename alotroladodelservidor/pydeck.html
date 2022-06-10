@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Folium</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <py-env>
+      - folium
+      - pandas
+    </py-env>
+    </head>
+    <body>
+      <div id="folium" style="width: 100%; height: 100%"></div>
+      <py-script output="folium">
+import folium
+import pandas as pd
+
+state_data = pd.read_json("https://github.com/jero98772/AlOtroLado/blob/main/core/data/graph_medellin_data.json?raw=true")
+
+m = folium.Map(location=[48, -102], zoom_start=3)
+folium.PolyLine(state_data["edges"],
+                color='green',
+                weight=15,
+                opacity=0.8).add_to(m)
+
+
+#folium.LayerControl().add_to(m)
+
+m
+      </py-script>
+    </body>
+</html>

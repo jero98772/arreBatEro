@@ -4,18 +4,20 @@
 class uml():
 	"""uml"""
 	def __init__(self, txt,sep="="):
-		uml=txt.split()
-		className=uml.split[0]
-		className=uml.split[1]
-		className=uml.split[1]
+		self.uml=txt.split(sep)
+		self.className=uml[0]
+		self.arguments=uml[1]
+		self.methots=uml[2]
+		self.code=""
 	#def file():
-	def string():
+	#def string():
 		
 class uml2Python(uml):
 	"""uml2Python"""
-	def __init__(self, arg):
+	def __init__(self, txt,sep="="):
 		super(uml2Python, self).__init__()
-		self.arg = arg
+		super.code=f"""class 
+"""
 
 class ocr():
 	def __init__(self, arg):
