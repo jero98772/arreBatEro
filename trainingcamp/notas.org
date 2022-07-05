@@ -1,0 +1,86 @@
+* dia 1 libreria estandar de c++
+
+** bits/stdc++
+incluye las librerias que usamos por defecto en competitiva
+
+codigo:
+
+#include <bits.stdc++.h>
+
+** using name
+
+using name std;
+
+ahorra poner std::
+
+** notas
+
+codeforces remueve todos los caracteres blancos
+
+si el input es muy grande es mejor usar archivos y pasarselo con < en consola
+
+a.out < archivo
+
+command time -v <programa>
+
+*** caso indefinido de lineas
+
+se usa while(cin << x){}
+
+** compilar con c++
+
+$g++ -std=c++17 -O2 -o name
+
+g++ compiladpor
+
+-std=c++17 incluir la libreria
+
+-O2 un optimisador para que corra mas rapido en la maquina local
+
+-Wall -Wextra muestra warnings
+
+-Werror toma warnings como
+
+** memoria
+
+n=numero para convertirlo de bits a bytes
+
+** se puede pregunar en un contest? si
+
+pero deben ser pregubtas que solo se responder con si o no
+
+** c++
+ for (int x:a){}
+ recorre un vector
+
+ punteros de un vector vec
+
+ vec.begin();
+ vec.end();
+
+ busqueda en O(log(n))
+ vec.upper_bound(num)
+
+ matriz n*m  dinamica llena de -1
+ vector<vector<int>> a(n,vector<int>(m,-1))
+
+ para organisar
+ sort(vec.begin(),vec.end(), comparador);
+
+ comparator(int x, int y){
+   return x>y;
+ }
+ 
+*** estructuras de datos
+  - set
+save file on terminal linux
+
+set<int> a;
+
+a.insert(x);
+
+a.count(x); -> true/false
+  -  hash map o diccionario
+    map<int,int> a;
+  
+    pair<key,value> pair(key,value)
