@@ -1,0 +1,7 @@
+* dia 2
+
+se empeso con con un codigo de fibonacci para mostrar la importancia de la programacion dinamica , con recursion y iterativa
+
+
+
+

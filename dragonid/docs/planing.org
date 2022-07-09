@@ -1,0 +1,6 @@
+* tecnologias
+en el esp32 , client 
+*** texto a vos https://iotdesignpro.com/projects/esp32-based-text-to-speech-converter-webserver
+*** vos a texto https://www.instructables.com/Speech-to-text-Keyboard-Via-WiFi-Using-an-ESP8266/
+server
+*** generar conversacion o asistente

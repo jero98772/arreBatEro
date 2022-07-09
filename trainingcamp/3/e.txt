@@ -1,0 +1,9 @@
+3
+a b d
+3
+abacaba 3
+aba c aba
+abadaba 3
+aba d aba
+aba 3
+a b a

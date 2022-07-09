@@ -1,0 +1,31 @@
+D(
+n estudiantes capacitados
+m bugs
+s cantidad de ayudas
+
+a complejidad de bugs
+b nivel estudiantes
+c ayudas
+
+
+
+Note
+Consider the first sample.
+
+The third student (with level 3) must fix the 2nd and 4th bugs (complexities 3 and 2 correspondingly) and the second student (with level 1) must fix the 1st and 3rd bugs (their complexity also equals 1). Fixing each bug takes one day for each student, so it takes 2 days to fix all bugs (the students can work in parallel).
+
+The second student wants 3 passes for his assistance, the third student wants 6 passes. It meets the university's capabilities as it is ready to give at most 9 passes.
+
+
+
+YES
+3 4 9
+1 3 1 2
+2 1 3
+4 3 6
+
+NO
+3 4 (5)
+1 3 1 2
+2 1 3
+(5) 3 6
