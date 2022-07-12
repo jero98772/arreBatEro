@@ -1,0 +1,27 @@
+leidos
+a dfs
+b buscar ejercio
+d done
+
+f
+
+secuencia rara
+ROYG R BIV ->8
+ROYG B IVGB IV YG vs ROYG R BIVR OY GR
+
+1234 1 567 ..¿1234 1 567?
+
+1234 5 67 45 67 34 vs 1234 1 5671 23 41
+
+
+4+x%7
+
+multiplo 4 %x
+
+h
+
+
+j
+
+Las barras pueden colocarse una encima de otra si sus longitudes son iguales. si iguales borrar
+

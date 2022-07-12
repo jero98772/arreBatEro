@@ -1,36 +1,26 @@
-// The API isBadVersion is defined for you.
-// bool isBadVersion(int version);
+n=12
+bad=10
+low,high,mid (higth+low)/2,mid low+(higth-low)/2
+0,12,6,6
+6,12,9,10
 
-class Solution {
-public:
-    int firstBadVersion(int n) {
-    }
-};
-using namespace std;
-int binarysearch(int x,int low,int high){
-     while(low<=high){
-        //for(int i=0;i<n;i++){
-        mid=(low+high)/2; 
-        if(isBadVersion(i)){
-            
-        }
-        else if(low){
-            
-        }
-         
-         
-     }
-    return low 
-    
-}
-int main(){
-    int n,bad;
-    cin>>n;
-    cin>>bad;
-    int low=0;
-    int high=n;
-    
+n=234
+bad=108
+low,high,mid (higth+low)/2,mid low+(higth-low)/2
+0,234,117,117
+0,117,58,58
+58,117,82,88
 
-    cout<<binarysearch(bad,low,higth)<<endl;
-    return 0;
-}
+82,117,99
+99,117,108
+
+88,117,102
+102,117,109
+102,109,105
+105,109,107
+107,109,108
+
+
+
+
+
