@@ -34,7 +34,7 @@ class piece:
 		self.typep=typep
 		self.color=color
 		self.x=pos[0]
-		self.y=pos[1]
+		self.y=pos[1] 
 		#self.pos
 	def __str__(self):
 		return self.typep
