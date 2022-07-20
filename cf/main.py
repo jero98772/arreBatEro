@@ -4,6 +4,8 @@ app=Flask(__name__)
 
 FILETEST="data/test.txt"
 CODE="data/code.py"
+#python a.py > t2 
+
 def wr(name,conent,mode):
 	with open(name,mode) as f:
 		f.write(conent)
@@ -20,7 +22,8 @@ def testcases():
 def index():
 	if request.methot=="POST":
 		code=request.from["code"]
-		wr()
+		wr(code)
+		run("python "+CODE+" > data/tests2.txt")
 	
 	return render_template("index.html")
 if __name__=="__main__":
