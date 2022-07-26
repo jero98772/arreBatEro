@@ -4,3 +4,7 @@ en el esp32 , client
 *** vos a texto https://www.instructables.com/Speech-to-text-Keyboard-Via-WiFi-Using-an-ESP8266/
 server
 *** generar conversacion o asistente
+*   references
+  https://www.youtube.com/watch?v=fQ4eC_afHf4
+  https://www.youtube.com/watch?v=aM2ktMKAunw
+https://www.youtube.com/watch?v=7lheZvVsEqQ

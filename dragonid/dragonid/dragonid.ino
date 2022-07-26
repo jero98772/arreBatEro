@@ -1,45 +1,48 @@
-#define optionaldata 
-#define internetconectin 
+#include <Talkie.h>
+//#include <TalkieUtils.h>
+//#include <Vocab_US_Large.h>
+//#include <Vocab_Special.h>
 
-#include <ESP8266WiFi.h>
-#ifdef internetconectin
-#include <WiFiManager.h>
-#endif
+#include <WiFi.h>
+//#include "BluetoothSerial.h"
 
-//#include <strings_en.h>
+//#define optdata
 
-
-String dogname = "txakur";
-String dogtype = "";
+String dogname = "Txakur";
+String dogtype = "husky";
 String phone1 = "";
-String ownername = "";
+String ownername = "jero";
 //String gender = "Macho";
 String gender = "Hembra";
 // si es hembra  añda a , si es macho no añada 
 
 //opcional data 
+#ifdef optdata
 String phone2 = "";
 String address = "";
 String notes = "";
 String email = "";
 String diases = "";
+#endif
 
 const char* ssid = dogname.c_str();
 
 WiFiServer server(80);
+//BluetoothSerial espbluetooth;
+
 
 String header;
 
 void setup() {
   Serial.begin(115200);
 
-  Serial.print("Setting AP (Access Point)…");
+  //Serial.print("Setting AP (Access Point)…");
   WiFi.softAP(ssid);
-  WiFiManager wifiManager;
- wifiManager.autoConnect("txakurIdConect");
-  IPAddress IP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(IP);
+  //espbluetooth.begin(ssid);
+  
+  //IPAddress IP = WiFi.softAPIP();
+  //Serial.print("AP IP address: ");
+  //Serial.println(IP);
 
   server.begin();
 }
@@ -47,19 +50,14 @@ void setup() {
 void loop() {
   WiFiClient client = server.available();   
   if (client) {                            
-    Serial.println("New Client.");          
+    //Serial.println("New Client.");          
     String currentLine = "";              
-    //Serial.print("7");
     while (client.connected()) {
-      //Serial.print("6");          
       if (client.available()) {
-        //Serial.print("5");            
         char c = client.read();             
         Serial.write(c);                   
         header += c;
-        //Serial.print("4");
         if (c == '\n') {                  
-          //Serial.print("3");next
           if (currentLine.length() == 0){
             client.println("HTTP/1.1 200 OK");
             client.println("Content-type:text/html");
@@ -72,14 +70,13 @@ void loop() {
             client.println("<p><h1>yo soy  "+dogname+"</h1></p><hr>");
             if (gender == "Macho"){
                 client.println("<p>soy un "+dogtype+" "+gender+"</p><br>");
-                client.println("<p>mi dueño se llama <b>"+ownername+"</b>, si no lo vez cerca te agradesco que lo contactes , puedo estar perdido</p>");
               }
             else {
                 client.println("<p>soy una "+dogtype+" "+gender+"</p><br>");
-                client.println("<p>mi dueño se llama <b>"+ownername+"</b>, si no lo vez cerca te agradesco que lo contactes , puedo estar perdida</p>");
               }
+            client.println("<p>mi dueño se llama <b>"+ownername+"</b>, si no lo vez cerca te agradesco que lo contactes , puedo estar perdido</p>");
             client.println("<p>su telefono es <b>"+phone1+"</b>, te agradesco si lo llamas.</p>");
-#ifdef optionaldata//            if (optionaldata){
+            #ifdef optdata;
               if (!(phone2 == "" && email == "")){
                 client.println("<p>si nesitas otros medios de contacto puedes comunicarlo a</p>");
                 if(!(phone2 == "")){
@@ -98,28 +95,19 @@ void loop() {
               if (!(notes == "")){
                 client.println("<br><p>"+notes+"</p>");
                 }
-              //}
-#endif
+          
+            #endif 
             break;
           }else{
             currentLine = "";
-            Serial.print("-1");
           }
-          Serial.print("-2");
         } else if (c != '\r') {  
           currentLine += c;
-          Serial.print("-3");      
         }
       }
     }
-     if (WiFi.status() == WL_CONNECTED){
-        client.print(F("GET "));
-  client.print("/api/v3/simple/price?ids=ethereum%2Cbitcoin&vs_currencies=usd%2Ceur"); // %2C == ,
-
-      }
-    Serial.print("fin");
     header = "";
     client.stop();
-    Serial.println("Client disconnected.");
-    Serial.println("");
-  }  }
+    //Serial.println("Client disconnected.");
+  }
+}
