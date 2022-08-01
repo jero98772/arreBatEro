@@ -7,7 +7,8 @@
 
 
 BluetoothSerial SerialBT;
-String txt;
+Talkie voice;
+
 void setup() {
   Serial.begin(115200);
   SerialBT.begin("Dragonid");
@@ -16,9 +17,10 @@ void setup() {
 void loop() {
  if(SerialBT.available()>0){
   SerialBT.readStringUntil('\n');
-    txt = SerialBT.readStringUntil('\n');
+    String txt = SerialBT.readStringUntil('\n');
     Serial.println(txt);
-    if(txt == "hola") {
-       Serial.println("Info");
+    for(int i=0;i<txt.length();i++){
+    voice.say(txt[i]);
     }
-}}
+  }
+}
