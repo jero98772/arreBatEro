@@ -1,12 +1,22 @@
-//#include <Talkie.h>
-//#include <TalkieUtils.h>
-//#include <Vocab_US_Large.h>
-//#include <Vocab_Special.h>
-
-#include <WiFi.h>
-#include "BluetoothSerial.h"
+#include <Arduino.h>
 
 //#define optdata
+#define webserver
+#define blue
+
+#ifdef webserver
+#include <WiFi.h>
+#endif
+
+#ifdef blue
+//#include "BluetoothSerial.h"
+#include <BLEDevice.h>
+#include <BLEServer.h>
+#include <BLEUtils.h>
+#include <BLE2902.h>
+#define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
+#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+#endif
 
 String dogname = "Txakur";
 String dogtype = "husky";
@@ -27,28 +37,44 @@ String diases = "";
 
 const char* ssid = dogname.c_str();
 
+#ifdef webserver
 WiFiServer server(80);
-//BluetoothSerial espbluetooth;
-
-
 String header;
+#endif
+
+#ifdef blue
+BLEDevice::init("MyESP32");
+#endif
 
 void setup() {
   Serial.begin(115200);
 
   //Serial.print("Setting AP (Access Point)…");
+  #ifdef webserver
   WiFi.softAP(ssid);
-  //espbluetooth.begin(ssid);
-  
+  server.begin();
+  #endif
+
+  #ifdef blue
+  //SerialBT.begin(ssid);
+  #endif  
   //IPAddress IP = WiFi.softAPIP();
   //Serial.print("AP IP address: ");
   //Serial.println(IP);
 
-  server.begin();
+  
 }
 
 void loop() {
-  WiFiClient client = server.available();   
+  #ifdef blue
+  /*if(SerialBT.available()>0){
+  SerialBT.readStringUntil('\n');
+    String txt = SerialBT.readStringUntil('\n');
+    Serial.println(txt);
+  }*/
+  #endif
+  #ifdef webserver
+  WiFiClient client = server.available();
   if (client) {                            
     //Serial.println("New Client.");          
     String currentLine = "";              
@@ -110,4 +136,5 @@ void loop() {
     client.stop();
     //Serial.println("Client disconnected.");
   }
+  #endif
 }
