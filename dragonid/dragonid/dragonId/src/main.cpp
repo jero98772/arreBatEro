@@ -2,20 +2,15 @@
 
 //#define optdata
 #define webserver
-#define blue
+#define tts
+
 
 #ifdef webserver
 #include <WiFi.h>
 #endif
 
-#ifdef blue
-//#include "BluetoothSerial.h"
-#include <BLEDevice.h>
-#include <BLEServer.h>
-#include <BLEUtils.h>
-#include <BLE2902.h>
-#define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
-#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+#ifdef tts
+#include <google-tts.h>
 #endif
 
 String dogname = "Txakur";
@@ -43,7 +38,9 @@ String header;
 #endif
 
 #ifdef blue
-BLEDevice::init("MyESP32");
+BLEServer *pServer;
+BLEService *pService;
+BLECharacteristic *pCharacteristic;
 #endif
 
 void setup() {
@@ -55,8 +52,7 @@ void setup() {
   server.begin();
   #endif
 
-  #ifdef blue
-  //SerialBT.begin(ssid);
+  #ifdef 
   #endif  
   //IPAddress IP = WiFi.softAPIP();
   //Serial.print("AP IP address: ");
