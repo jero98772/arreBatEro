@@ -1,3 +1,4 @@
+import re
 def adddp(n,dp,f=None):
     if dp[n]!=-1:
         return dp[n]
@@ -13,25 +14,24 @@ def fib(n):
         return fib(n-2)+fib(n-1)
 
 f1="""
-	def fib(n):
-		  if n<=2:
-		      return n
-		  else:
-		      return fib(n-2)+fib(n-1)
+def fib(n):
+	if n<=2:
+		return n
+	else:
+		return fib(n-2)+fib(n-1)
 """
-namef=f.__name__
-tmp=""
-for i in f1:
-    token+=i
-    if i==""
-    if token=="def " 
-        token=""
-        namef
-posf=f1.find(":")
-fname=
-elsepos=f1.find("else:")
-f1[:pos]+"""\n    if dp[n]!=-1:
-        return dp[n]"""+f1[pos:]
-#adddp(fib(n),dp)
+er=input()
+iselse=False
+#print(f1)
+fn=True
+for i in range(len(f1)):
+    #siempre va ser mandado como una funcion
+    if f1[i]==":" and fn:
+        pos=i+1
+        f1=f1[:pos]+"\n\tif dp[n]!=er:\n\t\treturn dp[n]"+f1[pos:]
+        pos=i-1
+        f1=f1[:pos]+",dp,er="+str(er)+""+f1[pos:]
+        fn=False
+print(f1)
 
-#"""
+
