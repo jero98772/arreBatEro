@@ -2,9 +2,10 @@
 //#include <TalkieUtils.h>
 //#include <Vocab_US_Large.h>
 //#include <Vocab_Special.h>
+#include <ESP8266WiFi.h>
 
-#include <WiFi.h>
-#include "BluetoothSerial.h"
+//#include <WiFi.h>
+//#include "BluetoothSerial.h"
 
 //#define optdata
 
@@ -33,6 +34,14 @@ WiFiServer server(80);
 
 String header;
 
+void recivemsg(){
+  while (Serial.available() == 0) {
+    String dat=Serial.readString();
+    if(dat!=""){
+      Serial.println(dat);
+    }
+  }
+}
 void setup() {
   Serial.begin(115200);
 
@@ -48,11 +57,13 @@ void setup() {
 }
 
 void loop() {
+  recivemsg();
   WiFiClient client = server.available();   
   if (client) {                            
     //Serial.println("New Client.");          
     String currentLine = "";              
     while (client.connected()) {
+      //recivemsg();
       if (client.available()) {
         char c = client.read();             
         Serial.write(c);                   
