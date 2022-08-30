@@ -17,30 +17,25 @@ def write(txt,filename,mode):
 #write("#bla by bla\n"+content,"bla.txt","w")
 #def writeFiles(path):
 def writeFiles(header,actualdir=os.getcwd()):
-	print(actualdir)
+	#print(actualdir)
 	paths=os.listdir(actualdir)
 	for i in paths: 
-		print(i,actualdir+i)
+		#print(i,actualdir+i)
 		if os.path.isdir(actualdir+i):
-			print("folder")
+			#print("folder")
 			writeFiles(header,actualdir+i+"/")
 		if ".py" in i:
 			content=readtxtstr(actualdir+i)
-			write('"""\n'+header+'\n"""\n'+content,actualdir+i,"w")
+			write('#!/usr/bin/env python\n# -*- coding: utf-8 -*-"\n"""\n'+header+'\n"""\n'+content,actualdir+i,"w")
 		if ".html" in i:
 			content=readtxtstr(actualdir+i)
 			write('<!--\n'+header+'\n-->\n'+content,actualdir+i,"w")
 		
 
 def main():
-	header=input()
-	writeFiles(header,os.getcwd()+"/test/")
+	header=input("input header for [example:'code make with love']\n")
+	print(os.listdir(),os.getcwd())
+	folder=input("folder [example: 'test']:\n")
+	writeFiles(header,os.getcwd()+"/"+folder+"/")
+	print("\nDone")
 main()
-"""
-rec()
-if file-> write
-if folder-> rec()
-
-
-
-"""

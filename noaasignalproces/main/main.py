@@ -4,16 +4,74 @@ import scipy.signal as signal
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
-from flask import Flask, render_template,redirect,request
 import datetime
+from flask import Flask, render_template,redirect,request
+import os
 
 SAVESFOLDER="static/wav/"
 IMGFOLDER="static/img/"
 
 app=Flask(__name__)
 
+def noaaResample(name:str):
+    fs, data = wav.read(SAVESFOLDER+name)  
+    data_crop = data[20*fs:21*fs]
+    analytical_signal = signal.hilbert(data)
+    data_am = np.abs(analytical_signal)
+    frame_width = int(0.5*fs)
+    w, h = frame_width, data_am.shape[0]//frame_width
+    image = Image.new('RGB', (w, h))
+    px, py = 0, 0
+    for p in range(data_am.shape[0]):
+        lum = int(data_am[p]//32 - 32)
+        if lum < 0: lum = 0
+        if lum > 255: lum = 255
+        image.putpixel((px, py), (0, lum, 0))
+        px += 1
+        if px >= w:
+            px = 0
+            py += 1
+            if py >= h:
+                break
+    image = image.resize((w, 4*h))
+    plt.imshow(image)
+    filename=name.replace(".wav",".png")
+    plt.savefig(IMGFOLDER+filename)
+    return filename
+def noaa(name:str):
+    fs, data = wav.read(SAVESFOLDER+name)  
+    data_crop = data[20*fs:21*fs]
+    resample = 4
+    data = data[::resample]
+    fs = fs//resample
+    analytical_signal = signal.hilbert(data)
+    data_am = np.abs(analytical_signal)
+    frame_width = int(0.5*fs)
+    w, h = frame_width, data_am.shape[0]//frame_width
+    image = Image.new('RGB', (w, h))
+    px, py = 0, 0
+    for p in range(data_am.shape[0]):
+        lum = int(data_am[p]//32 - 32)
+        if lum < 0: lum = 0
+        if lum > 255: lum = 255
+        image.putpixel((px, py), (0, lum, 0))
+        px += 1
+        if px >= w:
+
+            px = 0
+            py += 1
+            if py >= h:
+                break
+    image = image.resize((w, 4*h))
+    plt.imshow(image)
+    filename=name.replace(".wav",".png")
+    plt.savefig(IMGFOLDER+filename)
+    return filename
 @app.route("/",methods=['GET','POST'])
 def main():
+    if not os.path.exists(SAVESFOLDER):
+        print("exist")
+        os.mkdir(SAVESFOLDER)
     if request.method == 'POST':
         name="wavnoaa"+str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","").replace(".","")+".wav"
         file = request.files["file"]
@@ -32,67 +90,12 @@ def main():
     return render_template("index.html")
 @app.route("/outr/<string:name>")
 def outr(name):
-    fs, data = wav.read(SAVESFOLDER+name)  
-    data_crop = data[20*fs:21*fs]
-    analytical_signal = signal.hilbert(data)
-    data_am = np.abs(analytical_signal)
-    frame_width = int(0.5*fs)
-    w, h = frame_width, data_am.shape[0]//frame_width
-    image = Image.new('RGB', (w, h))
-    px, py = 0, 0
-    #fill image
-    for p in range(data_am.shape[0]):
-        lum = int(data_am[p]//32 - 32)
-        if lum < 0: lum = 0
-        if lum > 255: lum = 255
-        image.putpixel((px, py), (0, lum, 0))
-        px += 1
-        if px >= w:
-            #if (py % 50) == 0:
-            #    print(f"Line saved {py} of {h}")
-            px = 0
-            py += 1
-            if py >= h:
-                break
-    image = image.resize((w, 4*h))
-    plt.imshow(image)
-    #plt.show()
-    filename=name.replace(".wav",".png")
-    plt.savefig(IMGFOLDER+filename)
+    filename=noaaResample(name)
     return render_template("out.html",name="img/"+filename)
 
 @app.route("/out/<string:name>")
 def out(name):
-    fs, data = wav.read(SAVESFOLDER+name)  
-    data_crop = data[20*fs:21*fs]
-    resample = 4
-    data = data[::resample]
-    fs = fs//resample
-    analytical_signal = signal.hilbert(data)
-    data_am = np.abs(analytical_signal)
-    frame_width = int(0.5*fs)
-    w, h = frame_width, data_am.shape[0]//frame_width
-    image = Image.new('RGB', (w, h))
-    px, py = 0, 0
-    #fill image
-    for p in range(data_am.shape[0]):
-        lum = int(data_am[p]//32 - 32)
-        if lum < 0: lum = 0
-        if lum > 255: lum = 255
-        image.putpixel((px, py), (0, lum, 0))
-        px += 1
-        if px >= w:
-            #if (py % 50) == 0:
-            #    print(f"Line saved {py} of {h}")
-            px = 0
-            py += 1
-            if py >= h:
-                break
-    image = image.resize((w, 4*h))
-    plt.imshow(image)
-    #plt.show()
-    filename=name.replace(".wav",".png")
-    plt.savefig(IMGFOLDER+filename)
+    filename=noaa(name)
     return render_template("out.html",name="img/"+filename)
 try:
     if __name__ == '__main__':
