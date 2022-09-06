@@ -10,6 +10,7 @@ import os
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator,load_img, img_to_array
 from tensorflow.python.keras import optimizers
+from tensorflow.python.keras import backend as k
 from tensorflow.python.keras.models import Sequential,load_model
 from tensorflow.python.keras.layers import Dropout, Flatten, Dense, Activation,Convolution2D, MaxPooling2D
 class curapeces():
