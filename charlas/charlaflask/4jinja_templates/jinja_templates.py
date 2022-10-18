@@ -1,9 +1,11 @@
 from flask import Flask,render_template
 app=Flask(__name__)
+
 @app.route("/")
 @app.route("/a.html")
 def a():
 	return render_template("a.html")
+	
 @app.route("/b.html")
 def b():
 	return render_template("b.html")
