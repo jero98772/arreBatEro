@@ -20,13 +20,17 @@ def fib(n):
 	else:
 		return fib(n-2)+fib(n-1)
 """
-er=input()
+
+def main():
+    functionstr=input()
+    for i in range(len(functionstr)):
+        if f1[i]==":" and fn:
+
+if __name__ == '__main__':
+    main()
+
 iselse=False
-#print(f1)
 fn=True
-for i in range(len(f1)):
-    #siempre va ser mandado como una funcion
-    if f1[i]==":" and fn:
         pos=i+1
         f1=f1[:pos]+"\n\tif dp[n]!=er:\n\t\treturn dp[n]"+f1[pos:]
         pos=i-1
