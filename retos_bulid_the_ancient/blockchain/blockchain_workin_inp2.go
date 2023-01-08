@@ -6,15 +6,12 @@ import ("fmt"
 	"time"
 	"bytes"
 	"math/big"
-	"flag"
 	"math"
 	"encoding/binary"
 	"log"
 	"encoding/gob"
-	"github.com/boltdb/bolt"
 )
 const targetBits=16
-const dbFile="blockchain.db"
 const blocksBucket="block"
 type block struct{
 	timestamp int64
@@ -24,13 +21,12 @@ type block struct{
 	nonce int
 }
 type blockChain struct{
-	//blocks []*block
-	tip []*block
-	db *bolt.DB
+	blocks []*block
+
 }
 type blockChainIterator struct{
 	currentHash []block
-	db *bolt.DB
+
 }
 type proofOfWork struct{
 	block *block
@@ -60,6 +56,9 @@ func (b* block) serialize() []byte{
 	var result bytes.Buffer
 	encoder:=gob.NewEncoder(&result)
 	err:=encoder.Encode(b)
+	if err != nil {
+		log.Panic(err)
+	}
 	return result.Bytes()
 }
 func newProofOfWork(b *block) *proofOfWork{
@@ -69,40 +68,9 @@ func newProofOfWork(b *block) *proofOfWork{
 	return pow
 }
 func (bc *blockChain) addBlock(data string){
-	var lasthash []byte
-	err:=bc.db.View(func(tx *bolt.Tx) error){
-		b:= tx.Bucket([]byte(blocksBucket))
-		lasthash=b.get([]byte("l"))
-		return nil
-	}
-	newBlock:=newBlock(data,lasthash)
-	err = bc.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(blocksBucket))
-		err := b.Put(newBlock.Hash, newBlock.Serialize())
-		err = b.Put([]byte("l"), newBlock.Hash)
-		bc.tip = newBlock.Hash
-
-		return nil
-	})
-
-	//prevblock:=bc.blocks[len(bc.blocks)-1]
-	//newBlock:=newBlock(data,prevblock.hash)
-	//bc.blocks=append(bc.blocks,newBlock)
-}
-func (bc *blockChain) iterator() *blockChainIterator{
-	return &blockChainIterator{bc.tip,bc.db}
-}
-func (i *blockChainIterator) next() *block{
-	var thisBlock block
-	err := i.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(blocksBucket))
-		encodedBlock := b.Get(i.currentHash)
-		thisBlock = DeserializeBlock(encodedBlock)
-
-		return nil
-	})
-	i.currentHash=thisBlock.prevBlockHash
-	return block
+	prevblock:=bc.blocks[len(bc.blocks)-1]
+	newBlock:=newBlock(data,prevblock.hash)
+	bc.blocks=append(bc.blocks,newBlock)
 }
 func (pow *proofOfWork) prepareData(nonce int) []byte{
 	data:=bytes.Join([][]byte{
@@ -145,16 +113,7 @@ func (pow *proofOfWork) validate() bool{
 	isValid:= hashInt.Cmp(pow.target)==-1
 	return isValid
 }
-func (cli *CLI) printUsage() {
-	fmt.Println("Usage:")
-	fmt.Println("  addblock -data BLOCK_DATA - add a block to the blockchain")
-	fmt.Println("  printchain - print all the blocks of the blockchain")
-}
-func (cli *CLI) run(){
-	cli.validateArgs()
-	addBlockCmd:=flag.NewFlagSet("addBlock",flag.ExitOnError)
 
-}
 func newBlock(data string,prevBlockHash []byte) *block{
 	thisBlock:=&block{time.Now().Unix(), []byte(data),prevBlockHash,[]byte{},0}
 	pow:=newProofOfWork(thisBlock)
@@ -164,34 +123,11 @@ func newBlock(data string,prevBlockHash []byte) *block{
 	//thisBlock.setHash()
 	return thisBlock
 }
-func deserializeBlock(d []bytes) *block{
-	var myblock block
-	decoder:=gob.NewDecoder(bytes.NewReader(d))
-	err:=decoder.Decode(&myblock)
-	return &myblock
-}
 func genesisBlock() *block{
 	return newBlock("Genesis block",[]byte{})
 }
 func newBlockChain() *blockChain{
-	var tip []byte
-	db, err :bolt.Open(dbFile, 0600,nil)
-	err=db.Update(func(tx *bolt.Tx) error{
-		b:=tx.Bucket([]bytes(blocksBucket))
-		if b==nil{
-			genesis:=genesisBlock()
-			b,err:=tx.CreateBucket([]byte(blocksBucket))
-			err=b.Put(genesis.hash,genesis.serialize())
-			err=b.Put([]byte("l"),genesis.hash)
-			tip=genesis.hash
-		}else{
-			tip=b.Get([]byte("l"))
-		}
-		return nil
-	})
-	bc:=blockChain{tip,db}
-	return &bc
-	//return &blockChain{[]*block{genesisBlock()}}
+	return &blockChain{[]*block{genesisBlock()}}
 }
 
 func main(){

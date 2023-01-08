@@ -1,0 +1,126 @@
+<!-- from this https://maryrosecook.com/blog/post/little-lisp-interpreter-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<script type="text/javascript">
+		const input = prompt();
+		var tokenize=function(input){
+			return input.replaceAll("("," ( ").replaceAll(")"," ) ").split(" ").filter(x=>x!="");
+		}
+    var library={
+      p:function(x){
+        console.log(x);
+        return x;
+      },
+      pp:function(x){
+        x=parseInt(x)+1
+        return x;
+      },
+      mm: function(x){
+        x=parseInt(x)-1
+        return x;
+      },
+    sum: function(x){
+        total=0
+        for(const i in x){
+	console.log(i);
+          total=total+parseInt(x[i]);
+        }
+	//console.log(total);
+        return total;
+      }
+    };
+  var categorize = function(input) {
+    if (!isNaN(parseFloat(input))) {
+      return { type:'number', value: parseFloat(input) };
+    } else if (input[0] === '"' && input.slice(-1) === '"') {
+      return { type:'string', value: input.slice(1, -1) };
+    } else {
+      return { type:'identifier', value: input };
+    }
+  };
+  var Context = function(scope, parent) {
+    this.scope = scope;
+    this.parent = parent;
+
+    this.get = function(identifier) {
+      if (identifier in this.scope) {
+        return this.scope[identifier];
+      } else if (this.parent !== undefined) {
+        return this.parent.get(identifier);
+      }
+    };
+  };
+var special={
+  lambda: function(input,context){
+    return function(){
+      var lambdaArguments=arguments;
+      var lambdaScope=input[1].reduce(function(acc,x,i){
+        acc[x.value]=lambdaArguments[i];
+        return acc
+      },{});
+      return interpret(input[2], new Context(lambdaScope,context));
+    };
+  }
+}
+var interpret = function(input, context) {
+    if (context === undefined) {
+      return interpret(input, new Context(library));
+    } else if (input instanceof Array) {
+      return interpretList(input, context);
+    } else if (input.type === "identifier") {
+      return context.get(input.value);
+    } else if (input.type === "number" || input.type === "string") {
+      return input.value;
+    }
+  };
+  var interpretList = function(input, context) {
+    if (input.length > 0 && input[0].value in special) {
+      return special[input[0].value](input, context);
+    } else {
+      var list = input.map(function(x) { return interpret(x, context); });
+      if (list[0] instanceof Function) {
+        return list[0].apply(undefined, list.slice(1));
+      } else {
+        return list;
+      }
+    }
+  };
+
+  var parenthesize = function(input, list) {
+    if (list === undefined) {
+      return parenthesize(input, []);
+    } else {
+      var token = input.shift();
+      if (token === undefined) {
+        return list.pop();
+      } else if (token === "(") {
+        list.push(parenthesize(input, []));
+        return parenthesize(input, list);
+      } else if (token === ")") {
+        return list;
+      } else {
+        return parenthesize(input, list.concat(categorize(token)));
+      }
+    }
+  };
+
+  var parse = function(input) {
+    return parenthesize(tokenize(input));
+  };
+
+		console.log(interpret(parse(input)))
+
+	</script>
+</head>
+<body>
+examples:
+<br>
+pp(pp(pp(1)))
+<br>
+sum(pp(pp(pp(pp(1)))) mm(pp(pp(pp(1)))))
+</body>
+</html>
