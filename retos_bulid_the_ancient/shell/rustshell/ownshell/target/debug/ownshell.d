@@ -1,0 +1,1 @@
+/run/media/jero98772/particion\ princi/+++Proyectos+++/***Interesantes***/***personales***/arreBatEro/retos_bulid_the_ancient/shell/rustshell/ownshell/target/debug/ownshell: /run/media/jero98772/particion\ princi/+++Proyectos+++/***Interesantes***/***personales***/arreBatEro/retos_bulid_the_ancient/shell/rustshell/ownshell/src/main.rs

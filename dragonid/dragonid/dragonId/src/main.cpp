@@ -1,41 +1,7 @@
 #include <Arduino.h>
-
-//#define optdata
-#define webserver
-#define tts
+#include "constants_defines.h"
 
 
-#ifdef webserver
-#include <WiFi.h>
-#endif
-
-#ifdef tts
-#include <google-tts.h>
-#endif
-
-String dogname = "Txakur";
-String dogtype = "husky";
-String phone1 = "";
-String ownername = "jero";
-//String gender = "Macho";
-String gender = "Hembra";
-// si es hembra  añda a , si es macho no añada 
-
-//opcional data 
-#ifdef optdata
-String phone2 = "";
-String address = "";
-String notes = "";
-String email = "";
-String diases = "";
-#endif
-
-const char* ssid = dogname.c_str();
-
-#ifdef webserver
-WiFiServer server(80);
-String header;
-#endif
 
 #ifdef blue
 BLEServer *pServer;
@@ -44,31 +10,12 @@ BLECharacteristic *pCharacteristic;
 #endif
 
 void setup() {
-  Serial.begin(115200);
-
-  //Serial.print("Setting AP (Access Point)…");
-  #ifdef webserver
-  WiFi.softAP(ssid);
-  server.begin();
+  #ifndef tts || bluetooth || dragonid
+  Serial.begin(115200); 
   #endif
-
-  #ifdef 
-  #endif  
-  //IPAddress IP = WiFi.softAPIP();
-  //Serial.print("AP IP address: ");
-  //Serial.println(IP);
-
-  
 }
 
 void loop() {
-  #ifdef blue
-  /*if(SerialBT.available()>0){
-  SerialBT.readStringUntil('\n');
-    String txt = SerialBT.readStringUntil('\n');
-    Serial.println(txt);
-  }*/
-  #endif
   #ifdef webserver
   WiFiClient client = server.available();
   if (client) {                            
