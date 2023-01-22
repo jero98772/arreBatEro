@@ -26,7 +26,6 @@ server.begin();
 #include <google-tts.h>
 #endif
 
-
 #define String dogname = "Txakur";
 #define String dogtype = "husky";
 #define String phone1 = "";
@@ -54,4 +53,9 @@ server.begin();
 #define DMSG_STR(str)
 #endif 
 //----
+
+#ifndef tts || bluetooth || dragonid
+Serial.begin(115200); 
+#endif
+
 #endif
