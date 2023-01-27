@@ -8,3 +8,19 @@ server
   https://www.youtube.com/watch?v=fQ4eC_afHf4
   https://www.youtube.com/watch?v=aM2ktMKAunw
 https://www.youtube.com/watch?v=7lheZvVsEqQ
+* steps
+i will use
+https://github.com/earlephilhower/ESP8266SAM but i dont know what is pins coneccions , in this issue say the pins is refreended to esp8266 audio
+https://github.com/earlephilhower/ESP8266SAM/issues/5
+i have to learn esp8266 auido
+https://github.com/earlephilhower/ESP8266Audio/
+
+
+this video https://www.youtube.com/watch?v=p6BzdsJR4mE
+i have to do a hello word with esp8266 audio an later with esp8266 sam
+
+i need a esp8266 , TIP 120 transistor, speakers
+
+a resistence gold,red ,black ,brown
+
+this is conected to RX pin
