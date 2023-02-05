@@ -1,7 +1,7 @@
 #include "tools.h"
-using namespaces std;
+using namespace std;
 tools::tools(){}
-void tools::runBashCommand(string x){
+ static void tools::runBashCommand(string x){
     const char* command=x.c_str();
     system(x);
 }

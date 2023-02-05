@@ -6,12 +6,12 @@ using namespace std;
 class tools{
      public:
         tools();
-        void openFolder(string path);
+         static void runBashCommand(string x);
+    /*    void openFolder(string path);
         void openFile(string name);
-        void runBashCommand(string x);
     private:
         string path;
-        string fileopen;
+        string fileopen;*/
 };
 /*read file
  * save file

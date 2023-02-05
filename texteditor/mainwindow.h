@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QFileSystemModel>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -15,7 +16,20 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_actionNew_triggered();
+
+    void on_actionOpen_triggered();
+
+    void on_treeView_clicked(const QModelIndex &index);
+
+    void on_treeView_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
+    void keyPressEvent(QKeyEvent *event);
+    QString currentFile="/";
+    QString content;
+    QFileSystemModel *model;
 };
 #endif // MAINWINDOW_H
