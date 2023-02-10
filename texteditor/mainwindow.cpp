@@ -5,7 +5,7 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 #include "tools.h"
-
+#include <QMessageBox>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -50,8 +50,48 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             break;
         }
         case (Qt::Key_F5):{
+            QString fname=QFileDialog::getOpenFileName(this,"Open the file");
+            QFile file(fname);
+            currentFile=fname;
+            if(!file.open(QIODevice::ReadOnly | QFile::Text)){
+                QMessageBox::warning(this,"Warning","Cannot open file:"+file.errorString());
+                return;
+            }
+            setWindowTitle(fname);
+            QTextStream in(&file);
+            QString text=in.readAll();
+            ui->plainTextEdit->setPlainText(text);
+            file.close();
             break;
         }
+        case(Qt::Key_F6):{
+            QFile file(currentFile);
+            if(!file.open(QFile::WriteOnly | QFile::Text)){
+                QMessageBox::warning(this,"Warning","Cannot save file:"+file.errorString());
+                return;
+            }
+            QTextStream out(&file);
+            QString txt=ui->plainTextEdit->toPlainText();
+            out<<txt;
+            file.close();
+            break;
+        }
+        case(Qt::Key_F7):{
+            QString fname=QFileDialog::getSaveFileName(this,"Save file as");
+            QFile file(fname);
+            if(!file.open(QFile::WriteOnly | QFile::Text)){
+                QMessageBox::warning(this,"Warning","Cannot save file:"+file.errorString());
+                return;
+            }
+            currentFile=fname;
+            setWindowTitle(fname);
+            QTextStream out(&file);
+            QString txt=ui->plainTextEdit->toPlainText();
+            out<<txt;
+            file.close();
+            break;
+        }
+
     }
 
 }
@@ -62,9 +102,50 @@ void MainWindow::on_actionNew_triggered(){
 }
 
 
-void MainWindow::on_actionOpen_triggered()
-{
-    //QString filename= QFileDialog
+void MainWindow::on_actionOpen_triggered(){
+    QString fname=QFileDialog::getOpenFileName(this,"Open the file");
+    QFile file(fname);
+    currentFile=fname;
+    if(!file.open(QIODevice::ReadOnly | QFile::Text)){
+        QMessageBox::warning(this,"Warning","Cannot open file:"+file.errorString());
+        return;
+    }
+    setWindowTitle(fname);
+    QTextStream in(&file);
+    QString text=in.readAll();
+    ui->plainTextEdit->setPlainText(text);
+    //ui->treeView->setRootIndex(model->setRootPath(fname));
+    file.close();
+}
+
+
+
+void MainWindow::on_actionSave_triggered(){
+    QFile file(currentFile);
+    if(!file.open(QFile::WriteOnly | QFile::Text)){
+        QMessageBox::warning(this,"Warning","Cannot save file:"+file.errorString());
+        return;
+    }
+    QTextStream out(&file);
+    QString txt=ui->plainTextEdit->toPlainText();
+    out<<txt;
+    file.close();
+}
+
+
+void MainWindow::on_actionSave_as_triggered(){
+    QString fname=QFileDialog::getSaveFileName(this,"Save file as");
+    QFile file(fname);
+    if(!file.open(QFile::WriteOnly | QFile::Text)){
+        QMessageBox::warning(this,"Warning","Cannot save file:"+file.errorString());
+        return;
+    }
+    currentFile=fname;
+    setWindowTitle(fname);
+    QTextStream out(&file);
+    QString txt=ui->plainTextEdit->toPlainText();
+    out<<txt;
+    file.close();
 }
 
 

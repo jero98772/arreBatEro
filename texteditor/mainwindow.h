@@ -25,6 +25,10 @@ private slots:
 
     void on_treeView_doubleClicked(const QModelIndex &index);
 
+    void on_actionSave_triggered();
+
+    void on_actionSave_as_triggered();
+
 private:
     Ui::MainWindow *ui;
     void keyPressEvent(QKeyEvent *event);
