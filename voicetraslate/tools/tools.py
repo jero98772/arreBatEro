@@ -4,7 +4,7 @@ import os
 PORT=65429
 HOST='127.0.0.1'
 FROMIDIOM="es"
-TOIDIOM="pt"
+TOIDIOM="de"
 def recordAudio():
     # Record Audio
     r = sr.Recognizer()
