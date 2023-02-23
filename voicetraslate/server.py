@@ -1,6 +1,6 @@
 import socket
 from tools.tools import HOST,FROMIDIOM,TOIDIOM, PORT,speak,webTranslate,recordAudio
-s = socket.socket()
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('', PORT))
 s.listen(5)
 c, addr = s.accept()

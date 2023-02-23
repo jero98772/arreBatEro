@@ -1,0 +1,30 @@
+como hacer una pagina estilo mapa medieval
+comenzemos
+vamos a inkarta para crear nuestro mapa sin saber diseñar
+ya tengo uno prehecho para este video, el mapa es de la ciudad de medellin
+esta demorado
+->
+ya cargo
+lo descargo como imagen
+
+y ahora lo parto en secciones con html
+
+
+ya hay programas que hacen esto por nosotros y nos dan el codigo 
+voy  
+
+en la pagina que les motre partimos la imagen de forma mas comoda
+
+
+lo voy a hacer con partes de mi ciudad
+
+ya tenemos el codigo copiamos y pegamos y ya ejecutamos la pagina
+
+fin
+
+y se me olvidaba que habia que ponerlo en neocities  y que no dije que grabe y se perdio la grabacion entocnes por eso hay mas texto bla bla bla
+
+
+
+https://www.image-map.net/
+https://inkarnate.com/maps/

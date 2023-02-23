@@ -1,8 +1,10 @@
 import speech_recognition as sr
 from gtts import gTTS
 import os
-PORT=65429
-HOST='127.0.0.1'
+PORT=65426
+HOST='192.168.20.30'
+#HOST='127.0.0.1'
+
 FROMIDIOM="es"
 TOIDIOM="de"
 def recordAudio():
@@ -11,8 +13,6 @@ def recordAudio():
     with sr.Microphone() as source:
         print("Say something!")
         audio = r.listen(source)
-    
-        # Speech recognition using Google Speech Recognition
         data = ""
         try:
             # Uses the default API key
