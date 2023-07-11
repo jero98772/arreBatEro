@@ -5,7 +5,7 @@ from pygame import mixer
 import time
  
 # Set up OpenAI API credentials
-openai.api_key = "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"
+openai.api_key = ""
  
 # Configure TTS engine
 #tts_engine = pyttsx3.init()
