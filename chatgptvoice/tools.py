@@ -4,7 +4,7 @@ import os
 from pygame import mixer
 import time
 import openai
-openai.api_key = "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"
+openai.api_key = ""
 def recordAudio():
     # Record Audio
     r = sr.Recognizer()
