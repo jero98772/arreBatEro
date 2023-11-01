@@ -1,7 +1,8 @@
 from core.constants_defines import *
 from core.meshes.chunk_mesh import ChunkMesh
+from core.tools.terrain_gen import *
 import math
-
+import random
 
 class Chunk:
     def __init__(self, world, position):
@@ -12,6 +13,9 @@ class Chunk:
         self.voxels: np.array = None
         self.mesh: ChunkMesh = None
         self.is_empty = True
+
+        self.center = (glm.vec3(self.position) + 0.5) * CHUNK_SIZE
+        self.is_on_frustum = self.app.player.frustum.is_on_frustum
 
     def get_model_matrix(self):
         m_model = glm.translate(glm.mat4(), glm.vec3(self.position) * CHUNK_SIZE)
@@ -24,39 +28,41 @@ class Chunk:
         self.mesh = ChunkMesh(self)
 
     def render(self):
-        if not self.is_empty:
+        if not self.is_empty and self.is_on_frustum(self):
             self.set_uniform()
             self.mesh.render()
 
     def build_voxels(self):
-        # empty chunk
         voxels = np.zeros(CHUNK_VOL, dtype='uint8')
 
-        # fill chunk
         cx, cy, cz = glm.ivec3(self.position) * CHUNK_SIZE
-
-        for x in range(CHUNK_SIZE):
-            wx = x + cx+30
-            for z in range(CHUNK_SIZE):
-                wz = z + cz+30
-                world_height = int(glm.simplex(glm.vec2(wx*0.5, wz*2) * 0.01) * 32 + 32)
-                local_height = min(world_height - cy-32, CHUNK_SIZE)
-
-                for y in range(CHUNK_SIZE):#range(local_height):
-                    wy = y - cy
-                    #voxels[x + CHUNK_SIZE * z + CHUNK_AREA * y] = wy + 1
-                    if math.sqrt((x - CHUNK_SIZE / 2) * (x - CHUNK_SIZE / 2) + (y - CHUNK_SIZE / 2) * (y - CHUNK_SIZE / 2) + (z - CHUNK_SIZE / 2) * (z - CHUNK_SIZE / 2)) <= CHUNK_SIZE / 2:
-                        voxels[x + CHUNK_SIZE * z + CHUNK_AREA * y] = wy + 1
-                    #m_blocks[x][y][z].SetBlockType(BlockType_Grass);
+        self.generate_terrain(voxels, cx, cy, cz)
 
         if np.any(voxels):
             self.is_empty = False
-
         return voxels
 
+    @staticmethod
+    @njit
+    def generate_terrain(voxels, cx, cy, cz):
+        for x in range(CHUNK_SIZE):
+            wx = x + cx
+            for z in range(CHUNK_SIZE):
+                wz = z + cz
+                world_height = get_height(wx, wz)
+                local_height = min(world_height - cy, CHUNK_SIZE)
+
+                for y in range(local_height):#local_height#change
+                  wy = y + cy
+                  if math.sqrt((x - CHUNK_SIZE / 2) * (x - CHUNK_SIZE / 2) + (y - CHUNK_SIZE / 2) * (y - CHUNK_SIZE / 2) + (z - CHUNK_SIZE / 2) * (z - CHUNK_SIZE / 2)) <= CHUNK_SIZE / 2:
+                        #voxels[x + CHUNK_SIZE * z + CHUNK_AREA * y] = wy + 1
+                        set_voxel_id(voxels, x, y, z, wx, wy, wz, world_height)#change
 
 
 
+"""
+
+"""
 
 
 
