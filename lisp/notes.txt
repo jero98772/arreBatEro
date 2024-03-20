@@ -1,1 +1,3 @@
 https://roadmap.sh/ai?id=65f48e0c275ac16edcb36b9b 
+
+https://learnyouahaskell.com/
