@@ -1,0 +1,202 @@
+ gggg gg Section: tu cara de tu cara de butiffarra2 General Exam B             
+ gggg gg gg prefixprefixQuestion: What is the OM Part A, Volume 2 also called?            
+ gggg gg Answer: Training Manual.            
+ gggg gg Answer: Safety Manual.            
+ gggg gg *Answer: SEP Manual.            
+ gggg gg Question: Who is in command of the aircraft?            
+ gggg gg Answer: The Cruise Relief Pilot.            
+ gggg gg Answer: The Senior Pilot.            
+ gggg gg *Answer: The Commander.            
+ gggg gg gg prefixprefixQuestion: What does LRBL stand for?            
+ gggg gg Answer: Last Response Before Landing.            
+ gggg gg *Answer: Least Risk Bomb Location.            
+ gggg gg Answer: Low Rest Before Landing.            
+ gggg gg gg prefixprefixQuestion: What is a landing on water called?            
+ gggg gg Answer: Water landing.            
+ gggg gg Answer: Belly landing.            
+ gggg gg *Answer: Ditching.            
+ gggg gg gg prefixprefixQuestion: What does CLC stand for?            
+ gggg gg *Answer: Crew Letter Code.            
+ gggg gg Answer: Cabin Line Checker.            
+ gggg gg Answer: Crew Line Checker.            
+ gggg gg Question: When are Cabin Crew allowed to enter a bar or liquor store while in uniform?            
+ gggg gg Answer: Anytime.            
+ gggg gg *Answer: Never.            
+ gggg gg Answer: Only on special occasions.            
+ gggg gg gg prefixprefixQuestion: What is the policy regarding Cabin Crew use of mobile phones while on flight duty?            
+ gggg gg Answer: Use is only permitted on ground.            
+ gggg gg Answer: Use is permitted only after passengers disembarked?            
+ gggg gg *Answer: Not permitted.            
+ gggg gg Question: How are turbulence classified?            
+ gggg gg Answer: Mild, Medium, Strong, Wild.            
+ gggg gg *Answer: Light, Moderate, Severe, Extreme.            
+ gggg gg Answer: Light, Medium, Strong, Very Strong.            
+ gggg gg Question: How long is recurrent training valid for?            
+ gggg gg Answer: 2 years.            
+ gggg gg *Answer: 12 calendar months.            
+ gggg gg Answer: 6 calendar months.            
+ gggg gg gg prefixprefixQuestion: What is a Ferry Flight?            
+ gggg gg Answer: A flight to bring an aeroplane without commercial load from one aerodrome to another.            
+ gggg gg Answer: A flight carried out for the purpose of sales or advertising.            
+ gggg gg *Answer: A flight to bring an aeroplane which is unfit for commercial operation from one aerodrome to another.            
+ gggg gg gg prefixprefixQuestion: What is the personal review of evacuation duties prior to take-off and landing called?            
+ gggg gg Answer: Evacuation Review.            
+ gggg gg Answer: Emergency Review.            
+ gggg gg *Answer: Silent Review.            
+ gggg gg gg prefixprefixQuestion: What is the language to be used while on duty?            
+ gggg gg Answer: Icelandic or English.            
+ gggg gg Answer: Icelandic only.            
+ gggg gg *Answer: English only.            
+ gggg gg Question: Which form outlines the Cabin Crew Member´s areas of responsibility on board?            
+ gggg gg Answer: The Emergency Equipment Checklist.            
+ gggg gg *Answer: The Station and Security Checklist.            
+ gggg gg Answer: The Station and Security Completion Form.            
+ gggg gg gg prefixprefixQuestion: What is the Cabin Crew primary role on board the aeroplane?            
+ gggg gg Answer: Safety and Service.            
+ gggg gg Answer: Passenger´s service and comfort.            
+ gggg gg *Answer: Safety and Security.            
+ gggg gg gg prefixprefixQuestion: What does Shall means in the Operations manual?            
+ gggg gg Answer: The application of the rule is recommended.            
+ gggg gg Answer: The application of the rule is optional.            
+ gggg gg *Answer: The application of the rule is mandatory.            
+ gggg gg gg prefixprefixQuestion: What shall the SCCM announce just before the last door is closed?            
+ gggg gg *Answer: “All ground personnel please leave the aircraft”.            
+ gggg gg Answer: “Cabin Crew, closing door for departure”.            
+ gggg gg Answer: “Cabin Crew, closing doors for departure and crosscheck”.            
+ gggg gg Question: How is the locator light of the life vest demonstrated during the safety demonstration?            
+ gggg gg *Answer: By showing the location of the activation locator light tab.            
+ gggg gg Answer: By clearly showing the location of the locator light.            
+ gggg gg Answer: There is no need to demonstrate the locator light as it is visible.            
+ gggg gg gg prefixprefixQuestion: What callout shall the Flight Deck Crew make prior to each take-off and landing?            
+ gggg gg Answer: “Brace, Brace”.            
+ gggg gg Answer: “Cabin Crew Be Ready”.            
+ gggg gg *Answer: “Cabin Crew Take Your Seats”.            
+ gggg gg Question: When shall Cabin Crew brief Special Categories of Passengers?            
+ gggg gg Answer: As soon as they get on board.            
+ gggg gg *Answer: Before the Safety Demo.            
+ gggg gg Answer: After the Safety Demo.            
+ gggg gg gg prefixprefixQuestion: What does PED stand for?            
+ gggg gg *Answer: Portable Electronic Device.            
+ gggg gg Answer: Passenger Escorted Documentation.            
+ gggg gg Answer: Passenger Electronic Documentation.            
+ gggg gg Question: Who can ask for a De-briefing?            
+ gggg gg Answer: The SCCM only.            
+ gggg gg Answer: The Commander only.            
+ gggg gg *Answer: Any Crew Member.            
+ gggg gg gg prefixprefixQuestion: What is the Time of Useful Consciousness during a decompression at 40,000 feet?            
+ gggg gg Answer: 45 seconds.            
+ gggg gg Answer: 30 seconds.            
+ gggg gg *Answer: 18 seconds.            
+ gggg gg gg prefixprefixQuestion: What are the types of decompression?            
+ gggg gg *Answer: Slow and Rapid.            
+ gggg gg Answer: Moderate and Sudden.            
+ gggg gg Answer: Slow and Explosive.            
+ gggg gg gg prefixprefixQuestion: What are Cabin Crew immediate actions during a decompression?            
+ gggg gg *Answer: Grab mask, Sit down, Hold on.            
+ gggg gg Answer: Put on ´´Quick Oxygen Mask´´, Reduce engine power, Extend speed brakes, Turn and descend rapidly.            
+ gggg gg Answer: Grab mask, Go down and Speed breaks on.            
+ gggg gg gg prefixprefixQuestion: What are the Cabin Crew actions if oxygen mask deploys with signs of decompression and the aeroplane does not suspend climb, level-off or start descent?            
+ gggg gg Answer: Remain on oxygen.            
+ gggg gg Answer: Remain on oxygen for 1 minute then proceed to the flight deck to ensure pilots are wearing their oxygen mask.            
+ gggg gg *Answer: Contact the Flight Deck Crew via the interphone and confirm that they are wearing their oxygen mask.            
+ gggg gg gg prefixprefixQuestion: What announcement shall the Flight Deck Crew make as soon as the aeroplane has leveled off at a safe altitude post decompression?            
+ gggg gg Answer: “Cabin Crew initiate post decompression drill, Cabin Crew initiate post decompression drill”.            
+ gggg gg *Answer: “Cabin Crew descent completed, Cabin Crew descent completed”.            
+ gggg gg Answer: “Senior to flight deck, Senior to flight deck”.            
+ gggg gg gg prefixprefixQuestion: What type of fire is a Class A fire?            
+ gggg gg *Answer: Combustible Solid.            
+ gggg gg Answer: Flammable Gas.            
+ gggg gg Answer: Electrical.            
+ gggg gg Question: During a fire situation, what is the role of the Cabin Crew responsible to provide additional firefighting equipment and support the firefighting effort?            
+ gggg gg *Answer: Coordinator.            
+ gggg gg Answer: Communicator.            
+ gggg gg Answer: Fire fighter.            
+ gggg gg Question: When dealing with a lithium battery fire without a PED Fire Containment Bag, what are the Cabin Crew actions after the device has cooled down for a period of 10 to 15 minutes?            
+ gggg gg Answer: Place cooled device back inside the overhead locker and monitor for reignition.            
+ gggg gg Answer: Submerge cooled device in ice or dry ice and secure.            
+ gggg gg *Answer: Submerge cooled device in water and secure.            
+ gggg gg gg prefixprefixQuestion: What callout does the Firefighter use to alert the rest of the Cabin Crew?            
+ gggg gg Answer: “Help with fire at…location, Help with fire at…location”.            
+ gggg gg Answer: “Bring BCF to …(location), Bring BCF to...(location)”.            
+ gggg gg *Answer: “Bring Halon to…(Location), Bring Halon to…(location)”.            
+ gggg gg gg prefixprefixQuestion: What callout shall the Flight Deck Crew use in the event of an abnormal situation occurring on the ground or during critical phases of the flight?            
+ gggg gg *Answer: “Cabin Crew Stand By, Cabin Crew Stand By”.            
+ gggg gg Answer: “Senior to flight deck, Senior to flight deck”.            
+ gggg gg Answer: “Attention Crew on Station, Attention Crew on Station”.            
+ gggg gg gg prefixprefixQuestion: What callout shall the Flight Deck Crew use in case of a Pilot Incapacitation?            
+ gggg gg Answer: “Cabin Crew Stand By, Cabin Crew Stand By”.            
+ gggg gg *Answer: “Senior to flight deck, Senior to flight deck”.            
+ gggg gg Answer: “Attention Crew on Station, Attention Crew on Station”.            
+ gggg gg gg prefixprefixQuestion: What type of oxygen may Cabin Crew use on an incapacitated pilot?            
+ gggg gg Answer: Protective Breathing Equipment.            
+ gggg gg Answer: Drop down oxygen.            
+ gggg gg *Answer: Quick donning oxygen masks.            
+ gggg gg gg prefixprefixQuestion: What is the main callout in the event of an emergency arising/existing during flight?            
+ gggg gg Answer: “Cabin Crew Stand By, Cabin Crew Stand By”.            
+ gggg gg *Answer: “Senior to Flight Deck, Senior to Flight Deck”.            
+ gggg gg Answer: “Emergency, Emergency, Get Down, Get Down”.            
+ gggg gg gg prefixprefixQuestion: What are the two types of Emergency Landings Cabin Crew may face?            
+ gggg gg Answer: Prepared and Unexpected.            
+ gggg gg Answer: Planned and Unplanned.            
+ gggg gg *Answer: Expected and Unexpected.            
+ gggg gg gg prefixprefixQuestion: What are the Cabin Crew Shouted Commands after hearing the callout from the Flight Deck Crew for an Unexpected Emergency?            
+ gggg gg Answer: “Brace, Brace”.            
+ gggg gg Answer: “Heads Down, Heads Down”.            
+ gggg gg *Answer: “Bend Down, Bend Down”.            
+ gggg gg gg prefixprefixQuestion: What is the callout from the Flight Deck Crew at 1500ft/2minutes to landing?            
+ gggg gg Answer: “Bend down, Bend down”.            
+ gggg gg *Answer: “Cabin Crew take your seats, Cabin Crew take your seats”.            
+ gggg gg Answer: “Cabin Crew prepare for landing, Cabin Crew prepare for landing”.            
+ gggg gg gg prefixprefixQuestion: What is the shouted command to the passengers when the callout from the Flight Deck Crew “Brace Brace, Brace Brace” is made?            
+ gggg gg *Answer: “Brace, Brace”.            
+ gggg gg Answer: “Heads down Stay down, Heads down Stay down”.            
+ gggg gg Answer: “Hold tight, Hold tight”.            
+ gggg gg gg prefixprefixQuestion: What callout shall the Flight Deck Crew make in case of unexpected Emergency?            
+ gggg gg Answer: “Cabin Crew prepare for impact, Cabin Crew prepare for impact”.            
+ gggg gg Answer: “Bend down, Bend down”.            
+ gggg gg *Answer: “Emergency Emergency, Get down Get down”.            
+ gggg gg gg prefixprefixQuestion: What shall Cabin Crew shout to passengers after hearing the callout “Evacuate, Evacuate” on land?            
+ gggg gg Answer: “Emergency Evacuate, Emergency Evacuate”.            
+ gggg gg *Answer: “Open seat belt, Leave everything, Come this way”.            
+ gggg gg Answer: “Emergency Come this way, Emergency Come this way”.            
+ gggg gg gg prefixprefixQuestion: What is the shouted command to passengers while the Slides/Slide Rafts are inflating?            
+ gggg gg Answer: “Wait slide inflating”.            
+ gggg gg Answer: “Move back Slide inflating”.            
+ gggg gg *Answer: “Stand back Hold people back”.            
+ gggg gg Question: Where shall Cabin Crew direct the passengers after an evacuation?            
+ gggg gg *Answer: Upwind, at least 200 meters away for the aeroplane.            
+ gggg gg Answer: Downwind, at least 200 meters away from the aeroplane.            
+ gggg gg Answer: Downwind, at least 100 meters away from the aeroplane.            
+ gggg gg Question: Which of the following equipment can be used as signaling device during rescue?            
+ gggg gg *Answer: Mirror.            
+ gggg gg Answer: Hand Pump.            
+ gggg gg Answer: Bailing bucket.            
+ gggg gg gg prefixprefixQuestion: What are the three phases of the search and rescue procedure?            
+ gggg gg *Answer: Uncertainty, Alert and Distress Phase.            
+ gggg gg Answer: Uncertainty, Alert and Apprehension Phase.            
+ gggg gg Answer: Uncommunicated, Alert and Apprehension Phase.            
+ gggg gg gg prefixprefixQuestion: What are the Priorities of Survival?            
+ gggg gg Answer: Food, Company, the will to survive, Good survival skills.            
+ gggg gg *Answer: Protection, Location, Water, Food.            
+ gggg gg Answer: Protection, Water, Food, the will to survive.            
+ gggg gg gg prefixprefixQuestion: What does the acronym H.E.L.P. stand for?            
+ gggg gg *Answer: Heat Escape Lessening Posture.            
+ gggg gg Answer: Help Escape Lost Passenger.            
+ gggg gg Answer: Help Emergency Lost Passenger.            
+ gggg gg gg prefixprefixQuestion: What is the procedure to deal with a Lithium Battery Fire using a PED Fire Containment Bag?            
+ gggg gg *Answer: Open the Ped Fire Containment Bag, don gloves, place the PED inside bag, ensure the flaps are closed and the bag is sealed, lay the bag face down on the floor.            
+ gggg gg Answer: Open the PED Fire Containment Bag, remove the BCF, place the PED inside the bag and discharge BCF inside.            
+ gggg gg Answer: Break the seal to open the PED Fire Containment Bag, place the PED inside the bag, and close the bag.            
+ gggg gg gg prefixprefixQuestion: What signals do aeroplanes use to confirm that the ground to air signals have been understood during search and rescue?            
+ gggg gg Answer: During the hours of daylight: by extending the landing gears, during the hours of darkness: by turning the cabin light on and off twice.            
+ gggg gg Answer: During the hours of daylight: by turning the aeroplane around 360 degrees, during the hours of darkness: by turning the cockpit lights on and off twice.            
+ gggg gg *Answer: During the hours of daylight: by rocking the aeroplane wings, during the hours of darkness: by flashing the landing lights on and off twice or, if not so equipped, by switching on and off its navigation lights.            
+ gggg gg gg prefixprefixQuestion: What frequencies do the Emergency Locator Transmitters use?            
+ gggg gg Answer: 3G, GSM and HSPA.            
+ gggg gg *Answer: Civil, military and satellite.            
+ gggg gg Answer: LTE, Bluetooth and Wifi.            
+ gggg gg gg prefixprefixQuestion: What are the Basic Principles of Survival?            
+ gggg gg Answer: The knowledge of survival and following the Standard Operating Procedures.            
+ gggg gg *Answer: The will to survive and the knowledge of the correct use of survivals aids.            
+ gggg gg Answer: Food supplies, water and insect repellent.            
+ gggg gg https://gist.github.com/thewheat/bb67f632950c7feaf4b8a2f3febbd98a            
