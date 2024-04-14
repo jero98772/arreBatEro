@@ -1,0 +1,8 @@
+@42
+D=A
+M=D
+A=D+1
+@0
+0;JGT
+0;JLT
+D;JNE 

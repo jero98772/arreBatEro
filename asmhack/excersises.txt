@@ -1,0 +1,10 @@
+1 Write a program that loads the value 42 into the A register using the @ instruction.
+2 Create a program that sets the D register to the value 10 using the D=A instruction.
+3 Write a program that stores the value in the D register into the memory location pointed to by the A register using the M=D instruction.
+4 Develop a program that increments the value in the D register by 1 and stores the result back into the A register using the A=D+1 instruction.
+5 Create a simple program that jumps to the end of the program unconditionally using the 0;JMP instruction.
+6 Write a program that compares two values and jumps to a specific location in the program based on the result. Use instructions like D;JGT, D;JEQ, D;JLT to implement conditional jumps.
+7 Practice loading immediate values into registers. Write programs that load values like -1, 0, 1, etc., into the A and D registers using the @ instruction.
+8 Explore different addressing modes such as direct addressing, indirect addressing, and indexed addressing. Write programs that utilize these addressing modes to access memory locations and perform operations.
+9 Experiment with bitwise operations like AND, OR, and NOT. Write programs that perform bitwise operations on values stored in registers.
+10 Implement stack operations using assembly instructions. Write programs that push and pop values onto/from the stack and perform arithmetic or logical operations.
