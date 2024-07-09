@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Three.js 3D App</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+  // Parameters for the ellipse
+const centerX = 0;
+const centerY = 0;
+const centerZ = 0;
+const radiusX = 25; // semi-major axis
+const radiusY = 25; // semi-minor axis
+const angleIncrement = 0.01; // adjust to control speed of rotation
+
+let angle = 0;
+    function getRandom(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    for (let i = 0; i <getRandom(0, 20); i++) {
+      cube = new THREE.Mesh(geometry, material);
+      cube.position.x= getRandom(0, 20);
+      cube.position.y= getRandom(0, 20);
+      cube.position.z= getRandom(0, 20);
+
+      scene.add(cube);
+      //cube.translateOnAxis( getRandom(0, 100), getRandom(0, 100 ));
+
+    }
+    
+
+    camera.position.z = 5;
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+    // Update camera position
+    const x = centerX + radiusX * Math.cos(angle);
+    const y = centerY + radiusY * Math.sin(angle);
+    const z = centerZ + radiusY * Math.sin(angle); // for simplicity, assuming rotation in XY plane
+
+    camera.position.set(x, y, z);
+    camera.lookAt(centerX, centerY, centerZ);
+
+    // Increment angle
+    angle += angleIncrement;
+
+    // Render scene
+    renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>

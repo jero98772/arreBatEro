@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: tree
+Version: 1.0
+Summary: N-Tree implementation for taxonomic tree
+Author: Your Name
+Requires-Python: >=3.6
+Requires-Dist: pybind11>=2.8

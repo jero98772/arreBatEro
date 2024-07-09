@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabulous Search Engine</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="search-box">
+            <h1>Fabulous Search</h1>
+            <input type="text" id="message" placeholder="Type your query here...">
+            <button id="search-button" onclick="sendMessage()">Search</button>
+            <ul id="messages"></ul>
+        </div>
+    </div>
+    <script>
+             const socket = new WebSocket(`ws://${window.location.host}/ws`);
+
+        socket.onmessage = function(event) {
+            const messages = document.getElementById('messages');
+            const li = document.createElement('li');
+            li.innerText = event.data;
+            messages.appendChild(li);
+        };
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value;
+            socket.send(message);
+            messageInput.value = '';
+        }
+document.getElementById('search-button').addEventListener('click', function() {
+    const query = document.getElementById('search-input').value;
+    if (query) {
+        alert('Searching for: ' + query);
+        // Here you would typically handle the search request, e.g., sending it to a server.
+    } else {
+        alert('Please enter a search query.');
+    }
+});
+    </script>
+</body>
+</html>

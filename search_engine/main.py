@@ -2,16 +2,34 @@ from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.websockets import WebSocketDisconnect
-from tools import *
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+
+from tools.tools import *
+from tools import pagerank 
+
 app = FastAPI()
 
 # Mounting static files for frontend (optional)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
-# Serve the HTML file with HTTP GET
+file_path = 'data/data.json'
+data = read_data_from_json(file_path)
+
+graph = data.get('graph', {})
+pages = data.get('pages', {})
+page_content = data.get('page_content', {})
+
+inverted_index = create_index(page_content)
+print(inverted_index)
+pr = pagerank.PageRank(graph)
+pr.calculatePageRank()
+ranks = pr.getRanks()
+
 @app.get("/")
 async def read_root():
-    return HTMLResponse(content=open("static/index.html", "r").read())
+    return HTMLResponse(content=open("templates/index.html", "r").read())
 
 # WebSocket example
 class ConnectionManager:
@@ -30,38 +48,6 @@ class ConnectionManager:
             await connection.send_text(message)
 
 manager = ConnectionManager()
-
-
-graph = {
-    0: [1, 2],
-    1: [2],
-    2: [0],
-    3: [0]
-}
-# Global variables
-pages = {
-    "x": 0,
-    "s.net": 1,
-    "sd.com": 2,
-    "lin.com": 3
-
-}
-
-# Simulated page content
-page_content = {
-    0: "Welcome to x. This is a search engine.",
-    1: "S.net is a social network for developers.",
-    2: "SD.com offers software development services.",
-    3: "En álgebra lineal, a menudo es importante saber qué vectores mantienen sus direcciones sin cambios mediante una transformación lineal."
-
-}
-
-
-inverted_index = create_index(page_content)
-
-pr = pagerank.PageRank(graph)
-pr.calculatePageRank()
-ranks = pr.getRanks()
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
