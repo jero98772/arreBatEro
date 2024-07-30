@@ -1,14 +1,11 @@
 import pydeck as pdk
 import pandas as pd
 
-
 # Data from OpenStreetMap, accessed via osmpy
 DATA_URL = "https://raw.githubusercontent.com/ajduberstein/geo_datasets/master/biergartens.json"
 ICON_URL = "https://upload.wikimedia.org/wikipedia/commons/c/c4/Projet_bi%C3%A8re_logo_v2.png"
 
 icon_data = {
-    # Icon from Wikimedia, used the Creative Commons Attribution-Share Alike 3.0
-    # Unported, 2.5 Generic, 2.0 Generic and 1.0 Generic licenses
     "url": ICON_URL,
     "width": 242,
     "height": 242,
@@ -17,6 +14,8 @@ icon_data = {
 
 data = pd.read_json(DATA_URL)
 data["icon_data"] = None
+data["fixed"] = False  # Add a new column to track fixed status
+
 for i in data.index:
     data["icon_data"][i] = icon_data
 
@@ -30,18 +29,52 @@ icon_layer = pdk.Layer(
     size_scale=15,
     get_position=["lon", "lat"],
     pickable=True,
-    on_click=True#lambda info: open("https://en.wikipedia.org/wiki/San_Francisco") 
-
+    auto_highlight=True
 )
 
 tooltip = {
-    "html": "<b>{name}</b><br><a href='https://en.wikipedia.org/wiki/San_Francisco' target='_blank'>https://en.wikipedia.org/wiki/San_Francisco</a>",
+    "html": "<b>{name}</b><br>"
+            "<a href='#' onclick='toggleFixed({index}); return false;'>Toggle Fixed</a><br>"
+            "<a href='#' onclick='window.open(\"https://en.wikipedia.org/wiki/San_Francisco\", \"_blank\"); return false;'>Open Wikipedia</a>",
     "style": {
         "backgroundColor": "steelblue",
         "color": "white"
     }
 }
 
+r = pdk.Deck(
+    layers=[icon_layer], 
+    initial_view_state=view_state, 
+    tooltip=tooltip,
+    height=600,
+    width="100%"
+)
+
+# JavaScript function to toggle fixed status
+js_function = """
+function toggleFixed(index) {
+    const deck = document.getElementById('deck.gl-wrapper').deck;
+    const data = deck.props.layers[0].props.data;
+    data[index].fixed = !data[index].fixed;
+    
+    // Update the layer
+    deck.setProps({
+        layers: [
+            new deck.IconLayer({
+                ...deck.props.layers[0].props,
+                data: data,
+                getPosition: d => d.fixed ? [d.lon, d.lat] : null
+            })
+        ]
+    });
+}
+"""
+
+html_content = r.to_html(css_background_color="#333")
+html_with_js = html_content.replace('</script>', f'{js_function}</script>')
 
 r = pdk.Deck(layers=[icon_layer], initial_view_state=view_state, tooltip=tooltip)
 r.to_html("icon_layer.html")
+
+with open("icon_layer.html", "w") as f:
+    f.write(html_with_js)

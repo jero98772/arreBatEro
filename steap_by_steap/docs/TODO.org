@@ -1,6 +1,15 @@
-*Graphs
+* Graphs
 
-*Trees
+* Trees
 
-*algortithms
+* algortithms
 
+* Notes 
+
+/// doc string comments inside functions
+
+//! doc string for the header
+
+use format
+
+rustup component add rustfmt
