@@ -1,0 +1,3 @@
+g++ loops.cpp `llvm-config --cxxflags --ldflags --libs core` -o loops
+llvm-as hello.ll -o hello.bc
+lli
