@@ -1,0 +1,117 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> query
+Rule 1     query -> SELECT IDENTIFIER FROM IDENTIFIER WHERE condition
+Rule 2     condition -> IDENTIFIER EQUAL NUMBER
+Rule 3     condition -> IDENTIFIER EQUAL STRING
+
+Terminals, with rules where they appear
+
+EQUAL                : 2 3
+FROM                 : 1
+IDENTIFIER           : 1 1 2 3
+NUMBER               : 2
+SELECT               : 1
+STRING               : 3
+WHERE                : 1
+error                : 
+
+Nonterminals, with rules where they appear
+
+condition            : 1
+query                : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . query
+    (1) query -> . SELECT IDENTIFIER FROM IDENTIFIER WHERE condition
+
+    SELECT          shift and go to state 2
+
+    query                          shift and go to state 1
+
+state 1
+
+    (0) S' -> query .
+
+
+
+state 2
+
+    (1) query -> SELECT . IDENTIFIER FROM IDENTIFIER WHERE condition
+
+    IDENTIFIER      shift and go to state 3
+
+
+state 3
+
+    (1) query -> SELECT IDENTIFIER . FROM IDENTIFIER WHERE condition
+
+    FROM            shift and go to state 4
+
+
+state 4
+
+    (1) query -> SELECT IDENTIFIER FROM . IDENTIFIER WHERE condition
+
+    IDENTIFIER      shift and go to state 5
+
+
+state 5
+
+    (1) query -> SELECT IDENTIFIER FROM IDENTIFIER . WHERE condition
+
+    WHERE           shift and go to state 6
+
+
+state 6
+
+    (1) query -> SELECT IDENTIFIER FROM IDENTIFIER WHERE . condition
+    (2) condition -> . IDENTIFIER EQUAL NUMBER
+    (3) condition -> . IDENTIFIER EQUAL STRING
+
+    IDENTIFIER      shift and go to state 7
+
+    condition                      shift and go to state 8
+
+state 7
+
+    (2) condition -> IDENTIFIER . EQUAL NUMBER
+    (3) condition -> IDENTIFIER . EQUAL STRING
+
+    EQUAL           shift and go to state 9
+
+
+state 8
+
+    (1) query -> SELECT IDENTIFIER FROM IDENTIFIER WHERE condition .
+
+    $end            reduce using rule 1 (query -> SELECT IDENTIFIER FROM IDENTIFIER WHERE condition .)
+
+
+state 9
+
+    (2) condition -> IDENTIFIER EQUAL . NUMBER
+    (3) condition -> IDENTIFIER EQUAL . STRING
+
+    NUMBER          shift and go to state 10
+    STRING          shift and go to state 11
+
+
+state 10
+
+    (2) condition -> IDENTIFIER EQUAL NUMBER .
+
+    $end            reduce using rule 2 (condition -> IDENTIFIER EQUAL NUMBER .)
+
+
+state 11
+
+    (3) condition -> IDENTIFIER EQUAL STRING .
+
+    $end            reduce using rule 3 (condition -> IDENTIFIER EQUAL STRING .)
+
