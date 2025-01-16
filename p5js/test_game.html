@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js Sketch</title>
+    <!-- Preload p5.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+<body>
+    <h1>Welcome to p5.js</h1>
+    <p>This is a basic p5.js sketch setup.</p>
+
+    <script>
+// Define the map size and tile properties
+// Define the map size and tile properties
+const tileSize = 50;
+const rows = 10;
+const cols = 10;
+
+// Define the two types of tiles (ground and wall)
+const TILE_GROUND = 0;
+const TILE_WALL = 1;
+
+// The map represented as a 2D array (loaded matrix)
+let map = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 0, 1, 1, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+  [0, 1, 0, 1, 1, 1, 0, 1, 0, 0],
+  [0, 1, 0, 1, 0, 0, 0, 1, 0, 0],
+  [0, 1, 0, 1, 1, 0, 0, 0, 0, 0],
+  [0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
+  [0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+  [0, 0, 1, 1, 1, 0, 0, 1, 1, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+// Player position
+let playerX = 1;
+let playerY = 1;
+
+// Load images for textures
+let groundImg, wallImg;
+let playerSheet; // sprite sheet for animation
+let playerFrames = [];
+let currentFrame = 0;
+
+function preload() {
+  // Load images for tiles
+  groundImg = loadImage('https://hips.hearstapps.com/hmg-prod/images/rustic-weathered-wood-logs-royalty-free-image-1654709658.jpg?crop=0.88931xw:1xh;center,top&resize=1200:*'); // Replace with your image URL
+  wallImg = loadImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT42EqxgN7z0H28bDU7L0SBW2uXQeLmObNfA&s'); // Replace with your image URL
+  
+  // Load player sprite sheet
+  playerSheet = loadImage('https://thumbs.dreamstime.com/b/bright-playful-fish-game-character-modern-flat-illustration-style-perfect-engaging-gameplay-vibrant-visuals-333157216.jpg'); // Replace with your sprite sheet URL
+}
+
+function setup() {
+  createCanvas(cols * tileSize, rows * tileSize);
+  
+  // Extract frames from the sprite sheet
+  for (let i = 0; i < 4; i++) {
+    playerFrames.push(playerSheet.get(i * 32, 0, 32, 32)); // assuming each frame is 32x32
+  }
+}
+
+function draw() {
+  background(220);
+
+  // Draw the map with textures
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (map[y][x] === TILE_GROUND) {
+        image(groundImg, x * tileSize, y * tileSize, tileSize, tileSize); // ground texture
+      } else if (map[y][x] === TILE_WALL) {
+        image(wallImg, x * tileSize, y * tileSize, tileSize, tileSize); // wall texture
+      }
+    }
+  }
+
+  // Animate the player by drawing the current frame
+  image(playerFrames[currentFrame], playerX * tileSize, playerY * tileSize, tileSize, tileSize);
+
+  // Update player animation based on movement
+  if (frameCount % 10 === 0) { // Change frame every 10 frames
+    currentFrame = (currentFrame + 1) % playerFrames.length;
+  }
+}
+
+function keyPressed() {
+  // Move the player based on arrow keys
+  if (keyCode === LEFT_ARROW) {
+    movePlayer(-1, 0);
+  } else if (keyCode === RIGHT_ARROW) {
+    movePlayer(1, 0);
+  } else if (keyCode === UP_ARROW) {
+    movePlayer(0, -1);
+  } else if (keyCode === DOWN_ARROW) {
+    movePlayer(0, 1);
+  }
+}
+
+function movePlayer(dx, dy) {
+  let newX = playerX + dx;
+  let newY = playerY + dy;
+
+  // Check if the new position is within the bounds of the map
+  if (newX >= 0 && newX < cols && newY >= 0 && newY < rows) {
+    // Check if the new tile is not a wall
+    if (map[newY][newX] === TILE_GROUND) {
+      playerX = newX;
+      playerY = newY;
+    }
+  }
+}
+
+    </script>
+</body>
+</html>
