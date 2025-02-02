@@ -1,0 +1,7 @@
+/home/dasjero98772/Desktop/arreBatEro/toy_compiler/build/CMakeFiles/intrinsics_gen.dir
+/home/dasjero98772/Desktop/arreBatEro/toy_compiler/build/CMakeFiles/omp_gen.dir
+/home/dasjero98772/Desktop/arreBatEro/toy_compiler/build/CMakeFiles/acc_gen.dir
+/home/dasjero98772/Desktop/arreBatEro/toy_compiler/build/CMakeFiles/RISCVTargetParserTableGen.dir
+/home/dasjero98772/Desktop/arreBatEro/toy_compiler/build/CMakeFiles/toy_compiler.dir
+/home/dasjero98772/Desktop/arreBatEro/toy_compiler/build/CMakeFiles/edit_cache.dir
+/home/dasjero98772/Desktop/arreBatEro/toy_compiler/build/CMakeFiles/rebuild_cache.dir

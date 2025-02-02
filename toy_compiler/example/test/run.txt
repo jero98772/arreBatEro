@@ -1,0 +1,6 @@
+clang++ check_llvm.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o hello_llvm
+./hello_llvm > hello.ll
+
+clang hello.ll -o hello_exec
+
+./hello_exec
