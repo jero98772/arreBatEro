@@ -1,0 +1,145 @@
+from fastapi import FastAPI, WebSocket
+from fastapi.responses import HTMLResponse
+import torch
+from transformers import pipeline
+import numpy as np
+import io
+#
+app = FastAPI()
+
+# Load models on startup
+@app.on_event("startup")
+async def load_models():
+    try:
+        # Load Tacotron 2 TTS model
+        app.state.tts_model = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_tacotron2', model_math='fp16')
+        app.state.tts_model = app.state.tts_model.to('cuda').eval()
+    except:    
+        # Load WaveGlow vocoder
+        app.state.vocoder = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_waveglow', model_math='fp16')
+        app.state.vocoder = app.state.vocoder.remove_weightnorm(app.state.vocoder).to('cuda').eval()
+        
+    # Load Whisper ASR model
+    app.state.whisper_pipe = pipeline(
+        "automatic-speech-recognition",
+        model="openai/whisper-small",
+        device="cuda:0" if torch.cuda.is_available() else "cpu"
+    )
+
+# WebSocket endpoint
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_json()
+            
+            if data['type'] == 'tts':
+                # Text to Speech handling
+                text = data['text']
+                
+                # Generate speech with Tacotron 2 + WaveGlow
+                with torch.no_grad():
+                    sequence = np.array(app.state.tts_model.parse_text(text))[None, :]
+                    sequence = torch.autograd.Variable(torch.from_numpy(sequence)).cuda().long()
+                    mel_outputs, mel_lengths, _ = app.state.tts_model.infer(sequence)
+                    audio = app.state.vocoder.infer(mel_outputs)
+                    
+                # Convert audio to bytes and stream
+                audio_numpy = audio[0].data.cpu().numpy()
+                audio_bytes = audio_numpy.tobytes()
+                
+                # Stream audio in chunks
+                chunk_size = 1024 * 4  # 4KB chunks
+                for i in range(0, len(audio_bytes), chunk_size):
+                    chunk = audio_bytes[i:i+chunk_size]
+                    await websocket.send_bytes(chunk)
+
+            elif data['type'] == 'stt':
+                # Speech to Text handling
+                audio_data = data['audio']
+                
+                # Convert bytes to numpy array
+                audio_array = np.frombuffer(audio_data, dtype=np.float32)
+                
+                # Process with Whisper
+                result = app.state.whisper_pipe(audio_array)
+                
+                await websocket.send_json({
+                    "type": "stt_result",
+                    "text": result["text"]
+                })
+
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        await websocket.close()
+
+# Simple test client
+@app.get("/")
+async def get():
+    return HTMLResponse("""
+        <html>
+            <head>
+                <title>Voice AI Demo</title>
+            </head>
+            <body>
+                <h1>Test TTS</h1>
+                <input id="textInput" type="text"/>
+                <button onclick="sendText()">Send Text</button>
+                
+                <h1>Test STT</h1>
+                <button onclick="startRecording()">Start Recording</button>
+                <button onclick="stopRecording()">Stop Recording</button>
+                
+                <script>
+                    const ws = new WebSocket('ws://localhost:8000/ws');
+                    let mediaRecorder;
+                    let audioChunks = [];
+                    
+                    // TTS Handling
+                    function sendText() {
+                        const text = document.getElementById('textInput').value;
+                        ws.send(JSON.stringify({
+                            type: 'tts',
+                            text: text
+                        }));
+                    }
+                    
+                    // STT Handling
+                    async function startRecording() {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        mediaRecorder = new MediaRecorder(stream);
+                        
+                        mediaRecorder.ondataavailable = (event) => {
+                            event.data.arrayBuffer().then((buffer) => {
+                                const audioData = new Float32Array(buffer);
+                                ws.send(JSON.stringify({
+                                    type: 'stt',
+                                    audio: audioData.buffer
+                                }), { binary: true });
+                            });
+                        };
+                        
+                        mediaRecorder.start(1000); // Collect data every 1 second
+                    }
+                    
+                    function stopRecording() {
+                        mediaRecorder.stop();
+                    }
+                    
+                    // Handle incoming messages
+                    ws.onmessage = (event) => {
+                        if (event.data instanceof Blob) {
+                            // Handle audio playback
+                            const audio = new Audio(URL.createObjectURL(event.data));
+                            audio.play();
+                        } else {
+                            // Handle text results
+                            console.log('STT Result:', event.data);
+                        }
+                    };
+                </script>
+            </body>
+        </html>
+    """)
