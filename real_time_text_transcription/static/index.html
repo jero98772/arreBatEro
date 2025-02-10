@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-time Speech Transcription</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #transcription {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 25px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            touch-action: manipulation;
+        }
+        .recording {
+            background-color: #ff4444;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .button {
+                width: 90%;
+                margin: 10px auto;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-time Speech Transcription</h1>
+    <button id="recordButton" class="button">Start Recording</button>
+    <div id="transcription"></div>
+
+    <script>
+        let isRecording = false;
+        let mediaRecorder;
+        let ws;
+        const recordButton = document.getElementById('recordButton');
+        const transcriptionDiv = document.getElementById('transcription');
+
+        // Connect WebSocket
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
+            
+            ws.onmessage = function(event) {
+                transcriptionDiv.textContent += event.data + ' ';
+                // Auto-scroll to bottom
+                transcriptionDiv.scrollTop = transcriptionDiv.scrollHeight;
+            };
+
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+                stopRecording();
+            };
+
+            ws.onclose = function() {
+                if (isRecording) {
+                    stopRecording();
+                }
+            };
+        }
+
+        // Start recording
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: true,
+                    video: false
+                });
+                
+                mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'audio/webm;codecs=opus'
+                });
+                
+                mediaRecorder.ondataavailable = async (event) => {
+                    if (event.data.size > 0 && ws && ws.readyState === WebSocket.OPEN) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            try {
+                                ws.send(reader.result);
+                            } catch (error) {
+                                console.error('Error sending data:', error);
+                                stopRecording();
+                            }
+                        };
+                        reader.onerror = (error) => {
+                            console.error('Error reading file:', error);
+                        };
+                        reader.readAsDataURL(event.data);
+                    }
+                };
+
+                mediaRecorder.start(2000); // Capture in 1-second intervals
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                alert('Error accessing microphone. Please make sure you have granted microphone permissions.');
+                stopRecording();
+            }
+        }
+
+        // Stop recording
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.close();
+            }
+            recordButton.textContent = 'Start Recording';
+            recordButton.classList.remove('recording');
+            isRecording = false;
+        }
+
+        // Button click handler
+        recordButton.onclick = async () => {
+            if (!isRecording) {
+                try {
+                    connectWebSocket();
+                    await startRecording();
+                    recordButton.textContent = 'Stop Recording';
+                    recordButton.classList.add('recording');
+                    transcriptionDiv.textContent = '';
+                    isRecording = true;
+                } catch (error) {
+                    console.error('Error starting recording:', error);
+                    stopRecording();
+                }
+            } else {
+                stopRecording();
+            }
+        };
+
+        // Handle page unload
+        window.onbeforeunload = function() {
+            if (isRecording) {
+                stopRecording();
+            }
+        };
+    </script>
+</body>
+</html>
