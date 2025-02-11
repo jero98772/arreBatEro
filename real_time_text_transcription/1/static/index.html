@@ -1,7 +1,8 @@
+# static/index.html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Real-time Speech Transcription</title>
+    <title>Multi-language Speech Transcription</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
@@ -9,6 +10,13 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+        }
+        #controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
         }
         #transcription {
             margin-top: 20px;
@@ -27,26 +35,36 @@
             border: none;
             background-color: #4CAF50;
             color: white;
-            touch-action: manipulation;
         }
         .recording {
             background-color: #ff4444;
         }
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            .button {
-                width: 90%;
-                margin: 10px auto;
-                display: block;
-            }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>Real-time Speech Transcription</h1>
-    <button id="recordButton" class="button">Start Recording</button>
+    <h1>Multi-language Speech Transcription</h1>
+    <div id="controls">
+        <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="it">Italian</option>
+            <option value="pt">Portuguese</option>
+            <option value="nl">Dutch</option>
+            <option value="pl">Polish</option>
+            <option value="ru">Russian</option>
+            <option value="zh">Chinese</option>
+            <option value="ja">Japanese</option>
+            <option value="ko">Korean</option>
+        </select>
+        <button id="recordButton" class="button">Start Recording</button>
+    </div>
     <div id="transcription"></div>
 
     <script>
@@ -55,15 +73,14 @@
         let ws;
         const recordButton = document.getElementById('recordButton');
         const transcriptionDiv = document.getElementById('transcription');
+        const languageSelect = document.getElementById('languageSelect');
 
-        // Connect WebSocket
         function connectWebSocket() {
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
             
             ws.onmessage = function(event) {
                 transcriptionDiv.textContent += event.data + ' ';
-                // Auto-scroll to bottom
                 transcriptionDiv.scrollTop = transcriptionDiv.scrollHeight;
             };
 
@@ -71,20 +88,15 @@
                 console.error('WebSocket error:', error);
                 stopRecording();
             };
-
-            ws.onclose = function() {
-                if (isRecording) {
-                    stopRecording();
-                }
-            };
         }
 
-        // Start recording
         async function startRecording() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: true,
-                    video: false
+                    audio: {
+                        channelCount: 1,
+                        sampleRate: 16000
+                    }
                 });
                 
                 mediaRecorder = new MediaRecorder(stream, {
@@ -95,29 +107,23 @@
                     if (event.data.size > 0 && ws && ws.readyState === WebSocket.OPEN) {
                         const reader = new FileReader();
                         reader.onloadend = () => {
-                            try {
-                                ws.send(reader.result);
-                            } catch (error) {
-                                console.error('Error sending data:', error);
-                                stopRecording();
-                            }
-                        };
-                        reader.onerror = (error) => {
-                            console.error('Error reading file:', error);
+                            const data = {
+                                audio: reader.result,
+                                language: languageSelect.value
+                            };
+                            ws.send(JSON.stringify(data));
                         };
                         reader.readAsDataURL(event.data);
                     }
                 };
 
-                mediaRecorder.start(2000); // Capture in 1-second intervals
+                mediaRecorder.start(3000); // Capture in 3-second intervals
             } catch (error) {
-                console.error('Error accessing microphone:', error);
-                alert('Error accessing microphone. Please make sure you have granted microphone permissions.');
+                console.error('Error:', error);
                 stopRecording();
             }
         }
 
-        // Stop recording
         function stopRecording() {
             if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                 mediaRecorder.stop();
@@ -131,26 +137,19 @@
             isRecording = false;
         }
 
-        // Button click handler
         recordButton.onclick = async () => {
             if (!isRecording) {
-                try {
-                    connectWebSocket();
-                    await startRecording();
-                    recordButton.textContent = 'Stop Recording';
-                    recordButton.classList.add('recording');
-                    transcriptionDiv.textContent = '';
-                    isRecording = true;
-                } catch (error) {
-                    console.error('Error starting recording:', error);
-                    stopRecording();
-                }
+                connectWebSocket();
+                await startRecording();
+                recordButton.textContent = 'Stop Recording';
+                recordButton.classList.add('recording');
+                transcriptionDiv.textContent = '';
+                isRecording = true;
             } else {
                 stopRecording();
             }
         };
 
-        // Handle page unload
         window.onbeforeunload = function() {
             if (isRecording) {
                 stopRecording();

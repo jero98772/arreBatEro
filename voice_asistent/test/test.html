@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Text-to-Speech</title>
+</head>
+<body>
+    <h2>Natural Text-to-Speech</h2>
+    <textarea id="text" rows="4" cols="50" placeholder="Enter text here..."></textarea><br>
+    <button onclick="speak()">Speak</button>
+    <select id="voiceSelect"></select>
+
+    <script>
+        const synth = window.speechSynthesis;
+        const voiceSelect = document.getElementById("voiceSelect");
+
+        function populateVoices() {
+            const voices = synth.getVoices();
+            voiceSelect.innerHTML = "";
+            voices.forEach((voice, index) => {
+                const option = document.createElement("option");
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = index;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        function speak() {
+            const text = document.getElementById("text").value;
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = synth.getVoices();
+            const selectedVoiceIndex = voiceSelect.value;
+            if (voices[selectedVoiceIndex]) {
+                utterance.voice = voices[selectedVoiceIndex];
+            }
+            utterance.rate = 1; // Adjust for natural pacing (0.5 - 2)
+            utterance.pitch = 1; // Normal pitch (0 - 2)
+            synth.speak(utterance);
+        }
+
+        synth.onvoiceschanged = populateVoices;
+        window.onload = populateVoices;
+    </script>
+</body>
+</html>

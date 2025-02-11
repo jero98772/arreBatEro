@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reconocimiento de Voz</title>
+</head>
+<body>
+  <button id="start">Iniciar Reconocimiento</button>
+  <button id="stop">Detener Reconocimiento</button>
+  <div id="output" style="white-space: pre-wrap; margin-top: 20px;"></div>
+
+  <script>
+    const output = document.getElementById('output');
+    const startBtn = document.getElementById('start');
+    const stopBtn = document.getElementById('stop');
+
+    // Check for browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      output.textContent = 'El reconocimiento de voz no es compatible con este navegador.';
+    } else {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      // Set the language to Spanish (Spain); change as needed (e.g., 'es-MX' for Mexican Spanish)
+      recognition.lang = 'es-ES';
+
+      let accumulatedTranscript = "";
+      let silenceTimer;
+      const silenceDelay = 3000; // 3 seconds delay
+
+      recognition.onresult = (event) => {
+        let interimTranscript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const result = event.results[i];
+          if (result.isFinal) {
+            accumulatedTranscript += result[0].transcript + " ";
+          } else {
+            interimTranscript += result[0].transcript;
+          }
+        }
+        // Show the real-time transcription (confirmed + interim)
+        output.textContent = accumulatedTranscript + interimTranscript;
+
+        // Reset silence timer on new results
+        clearTimeout(silenceTimer);
+        silenceTimer = setTimeout(() => {
+          if (accumulatedTranscript.trim()) {
+            sendToBackend(accumulatedTranscript.trim());
+            accumulatedTranscript = "";
+          }
+        }, silenceDelay);
+      };
+
+      startBtn.onclick = () => {
+        recognition.start();
+        output.textContent = 'Escuchando...';
+      };
+
+      stopBtn.onclick = () => {
+        recognition.stop();
+        clearTimeout(silenceTimer);
+        const currentTranscript = output.textContent.trim();
+        if (currentTranscript && currentTranscript !== 'Escuchando...') {
+          sendToBackend(currentTranscript);
+        }
+        output.textContent += "\nDetenido";
+      };
+
+      async function sendToBackend(text) {
+        try {
+          const response = await fetch('/transcript', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: text })
+          });
+          const data = await response.json();
+          console.log("Respuesta del backend:", data);
+        } catch (error) {
+          console.error('Error al enviar el transcript:', error);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-python-multipart
-websockets
-whisper
-numpy
-soundfile
-pydub
