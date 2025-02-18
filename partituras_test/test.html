@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABCJS Sheet Music Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.0.0/abcjs-basic.min.js"></script>
+</head>
+<body>
+    <h2>Rendered Sheet Music</h2>
+    <div id="notation"></div>
+    
+    <script>
+        // Example ABC Notation String
+        const abcNotation = `
+            X:1
+            T:Twinkle Twinkle Little Star
+            M:4/4
+            L:1/4
+            K:C
+            C C G G | A A G2 | F F E E | D D C2 |
+        `;
+
+        // Render it inside the div
+        ABCJS.renderAbc("notation", abcNotation);
+    </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+gcc -o packet_sniffer packet_sniffer.c -Wall -Wextra -O2
+
+sudo setcap cap_net_raw+eip packet_sniffer2 
+
