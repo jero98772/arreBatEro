@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microphone Access with JavaScript and React</title>
+</head>
+<body>
+    <h1>Microphone Access Example</h1>
+    <div id="root"></div> <!-- React will mount here -->
+
+    <!-- React and ReactDOM from CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script>
+        // Plain JavaScript: Get microphone input and play through speaker
+        window.onload = function() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then((stream) => {
+                    const audio = document.createElement('audio');
+                    audio.srcObject = stream;
+                    audio.autoplay = true;
+                    document.body.appendChild(audio);
+                })
+                .catch((error) => {
+                    console.error("Error accessing microphone:", error);
+                });
+        };
+    </script>
+</body>
+</html>
