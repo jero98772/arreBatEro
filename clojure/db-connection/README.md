@@ -12,6 +12,20 @@ FIXME: explanation
 
     $ java -jar db-connection-0.1.0-standalone.jar [args]
 
+
+test redis with clojure
+
+    lein run -m db-connection.redis-test 
+
+
+test postgres with clojure
+
+    lein run -m db-connection.postgres-test
+
+test sqlite3 with clojure
+
+    lein run -m db-connection.sqlite-test
+
 ## Options
 
 FIXME: listing of options this app accepts.
