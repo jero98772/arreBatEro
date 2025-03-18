@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Partiture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/abcjs@6.0.0/dist/abcjs-basic-min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-white shadow-lg">
+        <!-- Keep your existing navigation -->
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+            <h1 class="text-3xl font-bold mb-6">Add New Partiture</h1>
+            <form id="partitureForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Title</label>
+                    <input class="w-full px-3 py-2 border rounded-lg" type="text" id="title" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="composer">Composer</label>
+                    <input class="w-full px-3 py-2 border rounded-lg" type="text" id="composer" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="instrument">Instrument</label>
+                    <input class="w-full px-3 py-2 border rounded-lg" type="text" id="instrument" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="abcNotation">ABC Notation</label>
+                    <textarea class="w-full px-3 py-2 border rounded-lg font-mono" 
+                              id="abcNotation" 
+                              rows="10"
+                              placeholder="Enter ABC notation here..."
+                              required></textarea>
+                </div>
+                <div class="mb-4">
+                    <div id="notationPreview" class="border p-4"></div>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <a href="/" class="px-4 py-2 text-gray-500 hover:text-gray-700">Cancel</a>
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" type="submit">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Real-time preview
+        const abcTextarea = document.getElementById('abcNotation');
+        const previewDiv = document.getElementById('notationPreview');
+        
+        abcTextarea.addEventListener('input', () => {
+            ABCJS.renderAbc(previewDiv, abcTextarea.value);
+        });
+document.getElementById('partitureForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Create URL-encoded form data
+    const formData = new URLSearchParams();
+    formData.append('title', document.getElementById('title').value);
+    formData.append('composer', document.getElementById('composer').value);
+    formData.append('instrument', document.getElementById('instrument').value);
+    formData.append('abc', document.getElementById('abcNotation').value);
+
+    try {
+        const response = await fetch('/api/partiture', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData.toString()
+        });
+
+        if (response.ok) {
+            window.location.href = '/';
+        } else {
+            const errorData = await response.json();
+            alert('Error saving partiture: ' + (errorData.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error saving partiture: ' + error.message);
+    }
+});
+        document.getElementById('partitureForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const partiture = {
+                title: document.getElementById('title').value,
+                composer: document.getElementById('composer').value,
+                instrument: document.getElementById('instrument').value,
+                abc: document.getElementById('abcNotation').value
+            };
+
+            try {
+                const response = await fetch('/api/partiture', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(partiture)
+                });
+
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    alert('Error saving partiture');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving partiture');
+            }
+        });
+    </script>
+</body>
+</html>
