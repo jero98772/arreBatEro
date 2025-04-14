@@ -49,34 +49,34 @@
 		       :headers {"Content-Type" "application/json"}
 		       :body (json/generate-string {:error (str "Could not create partiture: " (ex-message e))})})))
   
-(GET "/api/partiture/:id" [id]
-   (println "Fetching partiture:" id) 
-  (let [key (str "partiture:" id)  ;; Ensure key format
-        data (read-edn! key)]      ;; Fetch data
-    (if data
-      (do
-        (println "Retrieved partiture:" key "->" data)  ;; Log data in the terminal
-        {:status 200
-         :headers {"Content-Type" "application/json"}
-         :body (json/generate-string data)})  ;; Convert EDN to JSON
-      (do
-        (println "Partiture not found for ID:" id)  ;; Log error in the terminal
-        {:status 404
-         :headers {"Content-Type" "application/json"}
-         :body (json/generate-string {:error "Partiture not found"})}))))
-  
-  (PUT "/api/partiture/:id" {params :params}
-       (let [id (:id params)
-             existing (read-edn! id)]
-         (if existing
-           (do
-             (update! id (pr-str (merge existing params)))
-             {:status 200
-              :headers {"Content-Type" "application/json"}
-              :body "{\"status\": \"updated\"}"})
-           {:status 404
-            :headers {"Content-Type" "application/json"}
-            :body "{\"error\": \"Partiture not found\""})))
+		(GET "/api/partiture/:id" [id]
+		  (println "Requested ID:" id)
+		  (let [redis-key (if (.startsWith id "partiture:")
+		                    id  ; If ID already has the prefix, use it as is
+		                    (str "partiture:" id))  ; Otherwise, add the prefix
+		        data (read-edn! redis-key)]
+		    (println "Accessing Redis key:" redis-key)
+		    (println "Retrieved data:" data)
+		    (if data
+		      {:status 200
+		       :headers {"Content-Type" "application/json"}
+		       :body (json/generate-string data)}  ; Return the data as is
+		      {:status 404
+		       :headers {"Content-Type" "application/json"}
+		       :body (json/generate-string {:error "Partiture not found"})})))
+
+		(PUT "/api/partiture/:id" {params :params}
+		     (let [id (:id params)
+		           existing (read-edn! id)]
+		       (if existing
+		         (do
+		           (update! id (pr-str (merge existing params)))
+		           {:status 200
+		            :headers {"Content-Type" "application/json"}
+		            :body "{\"status\": \"updated\"}"})
+		         {:status 404
+		          :headers {"Content-Type" "application/json"}
+		          :body "{\"error\": \"Partiture not found\"}"})))
   
   (DELETE "/api/partiture/:id" [id]
           (let [result (delete! id)]
@@ -88,16 +88,13 @@
                :headers {"Content-Type" "application/json"}
                :body "{\"error\": \"Partiture not found\""})))
   
-
-
-  
   ;; Static html routes with proper content type
   (GET "/edit/:id" [id] (html-response "edit.html"))
-  
+
+  (GET "/partiture/:id" [id] (html-response "partiture.html"))
+
   (GET "/delete/:id" [id] (html-response "delete.html"))
-  
-  (GET "/all" [] (html-response "all.html"))
-  
+    
   ;; Serve static assets
   (route/resources "/")
   

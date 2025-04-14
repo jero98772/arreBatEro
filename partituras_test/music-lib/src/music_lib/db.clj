@@ -44,10 +44,25 @@
   (wcar* (car/set key (pr-str value))))
 
 (defn read-edn!
-  "Read and parse EDN string back to Clojure data"
+  "Read and parse EDN string back to Clojure data with enhanced error handling"
   [key]
-  (when-let [value (wcar* (car/get key))]
-    (read-string value)))
+  (println "Attempting to read key:" key)
+  (try
+    (when-let [value (wcar* (car/get key))]
+      (println "Raw Redis value:" value)
+      (try
+        (let [parsed (read-string value)]
+          (println "Successfully parsed EDN")
+          parsed)
+        (catch Exception e
+          (println "EDN parsing failed for value:" value)
+          (println "Exception:" (ex-message e))
+          nil)))
+    (catch Exception e
+      (println "Redis operation failed for key:" key)
+      (println "Exception:" (ex-message e))
+      nil)))
+
 
 (defn get-all-keys
   "Get all keys in the database (use with caution in production!)

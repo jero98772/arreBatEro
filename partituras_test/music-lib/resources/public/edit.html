@@ -49,53 +49,73 @@
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const partitureId = urlParams.get('id');
+        const pathParts = window.location.pathname.split('/');
+        const fullId = pathParts[pathParts.length - 1];
+        // The UUID part without prefix
+        const partitureId = fullId;
 
         async function loadPartiture() {
             try {
+                console.log("Loading partiture with ID:", partitureId);
                 const response = await fetch(`/api/partiture/${partitureId}`);
                 if (!response.ok) throw new Error('Failed to fetch partiture');
                 const partiture = await response.json();
+                console.log("Loaded partiture:", partiture);
 
-                document.getElementById('title').value = partiture.title;
-                document.getElementById('composer').value = partiture.composer;
-                document.getElementById('instrument').value = partiture.instrument;
-                document.getElementById('abcNotation').value = partiture.abc;
-                ABCJS.renderAbc('notationPreview', partiture.abc);
+                document.getElementById('title').value = partiture.title || '';
+                document.getElementById('composer').value = partiture.composer || '';
+                document.getElementById('instrument').value = partiture.instrument || '';
+                document.getElementById('abcNotation').value = partiture.abc || '';
+                
+                if (partiture.abc) {
+                    ABCJS.renderAbc('notationPreview', partiture.abc);
+                }
             } catch (error) {
-                console.error(error);
+                console.error("Error loading partiture:", error);
                 alert('Error loading partiture');
             }
         }
 
         document.getElementById('abcNotation').addEventListener('input', () => {
-            ABCJS.renderAbc('notationPreview', document.getElementById('abcNotation').value);
+            const abcNotation = document.getElementById('abcNotation').value;
+            if (abcNotation) {
+                ABCJS.renderAbc('notationPreview', abcNotation);
+            }
         });
 
         document.getElementById('editPartitureForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const updatedPartiture = {
-                title: document.getElementById('title').value,
-                composer: document.getElementById('composer').value,
-                instrument: document.getElementById('instrument').value,
-                abc: document.getElementById('abcNotation').value
-            };
-
+            
+            // Create form data the same way as in the add partiture page
+            const formData = new URLSearchParams();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('composer', document.getElementById('composer').value);
+            formData.append('instrument', document.getElementById('instrument').value);
+            formData.append('abc', document.getElementById('abcNotation').value);
+            
             try {
+                console.log("Updating partiture with ID:", partitureId);
+                console.log("Update data:", Object.fromEntries(formData));
+                
                 const response = await fetch(`/api/partiture/${partitureId}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedPartiture)
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData.toString()
                 });
+                
                 if (response.ok) {
+                    console.log("Update successful");
                     window.location.href = '/';
                 } else {
-                    alert('Error updating partiture');
+                    const errorData = await response.json();
+                    console.error("Server returned error:", errorData);
+                    alert('Error updating partiture: ' + (errorData.error || 'Unknown error'));
                 }
             } catch (error) {
-                console.error(error);
-                alert('Error updating partiture');
+                console.error("Update failed:", error);
+                alert('Error updating partiture: ' + error.message);
             }
         });
 

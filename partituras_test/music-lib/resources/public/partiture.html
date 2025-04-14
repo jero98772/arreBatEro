@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Partiture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/abcjs@6.0.0/dist/abcjs-basic-min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-white shadow-lg">
+        <!-- Keep your existing navigation -->
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+            <h1 class="text-3xl font-bold mb-6">View Partiture</h1>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Title</label>
+                <div id="titleDisplay" class="px-3 py-2 text-gray-900"></div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Composer</label>
+                <div id="composerDisplay" class="px-3 py-2 text-gray-900"></div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Instrument</label>
+                <div id="instrumentDisplay" class="px-3 py-2 text-gray-900"></div>
+            </div>
+            
+            <div class="mb-4">
+                <div class="block text-gray-700 text-sm font-bold mb-2">Musical Notation</div>
+                <div id="notationPreview" class="border p-4"></div>
+            </div>
+            
+            <div class="flex justify-end">
+                <a href="/" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                    Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const pathParts = window.location.pathname.split('/');
+        const fullId = pathParts[pathParts.length - 1];
+        const partitureId = fullId;
+
+        async function loadPartiture() {
+            try {
+                console.log("Loading partiture with ID:", partitureId);
+                const response = await fetch(`/api/partiture/${partitureId}`);
+                if (!response.ok) throw new Error('Failed to fetch partiture');
+                const partiture = await response.json();
+                console.log("Loaded partiture:", partiture);
+
+                // Update to use correct element IDs
+                document.getElementById('titleDisplay').textContent = partiture.title || '';
+                document.getElementById('composerDisplay').textContent = partiture.composer || '';
+                document.getElementById('instrumentDisplay').textContent = partiture.instrument || '';
+                
+                if (partiture.abc) {
+                    ABCJS.renderAbc('notationPreview', partiture.abc);
+                }
+            } catch (error) {
+                console.error("Error loading partiture:", error);
+                alert('Error loading partiture');
+            }
+        }
+
+        loadPartiture();
+    </script>
+</body>
+</html>

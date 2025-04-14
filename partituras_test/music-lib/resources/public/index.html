@@ -166,8 +166,9 @@ async function loadPartitures() {
                         } catch (error) {
                             console.error('Error rendering ABC notation:', error);
                             document.querySelector(`.abc-preview-${partiture.id.replace(/:/g, '-')}`).innerHTML = 
-                                '<div class="text-red-500">Click to see more</div>';
-                        }
+                                    `<div class="text-blue-500">
+                                            <a href="/partiture/${partiture.id}">Click to see more</a>
+                                        </div>`;                        }
                     }
                 }
             });
