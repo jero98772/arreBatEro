@@ -51,17 +51,19 @@ def get_satellites():
 @app.route("/positions")
 def get_positions():
     now = ts.now()
-    position = get_current_position(
-        satellite, 
-        now,
-        observer_lat=6.223301, 
-        observer_lon=-75.5959321,
-        observer_elevation_m=1695
-    )
+    positions_data = []  # Initialize the list first
+    
     for name, satellite in SATELLITES.items():
-        position = get_current_position(satellite, now)
+        position = get_current_position(
+            satellite, 
+            now,
+            observer_lat=6.223301, 
+            observer_lon=-75.5959321,
+            observer_elevation_m=1695
+        )
         altitude = position['altitude']
         positions_data.append({
+            "name": name,  # Added name for easier identification
             "norad_id": TLE_DATA[name][1][2:7].lstrip('0'),
             "latitude": position['latitude'],
             "longitude": position['longitude'],

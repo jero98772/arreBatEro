@@ -11,26 +11,30 @@ def get_satellite_object(tle_line1, tle_line2, name="Satellite", ts=None):
         ts = load.timescale()
     return EarthSatellite(tle_line1, tle_line2, name, ts)
 
-def get_current_position(Satellite, timestamp,observer_lat=6.223301, observer_lon=-75.5959321, observer_elevation_m=1695):
+def get_current_position(satellite, timestamp, observer_lat=6.223301, observer_lon=-75.5959321, observer_elevation_m=1695):
     """
     Calculates the latitude, longitude, altitude, velocity of a satellite
-    and its altitude and azimuth as seen from a specific ground observer
-    at a given timestamp.
+    and its altitude and azimuth as seen from a specific ground observer.
     """
     ts = load.timescale()
+    
+    # Convert timestamp to Skyfield Time object
+    if not isinstance(timestamp, load.timescale().__class__):
+        timestamp = ts.utc(timestamp)
+    
     geocentric = satellite.at(timestamp)
     subpoint = wgs84.subpoint(geocentric)
     velocity = np.linalg.norm(geocentric.velocity.km_per_s)
-
+    
     observer = wgs84.latlon(observer_lat, observer_lon, observer_elevation_m)
     astrometric = observer.at(timestamp).observe(satellite)
     alt, az, distance = astrometric.altaz()
-
+    
     return {
         "latitude": subpoint.latitude.degrees,
         "longitude": subpoint.longitude.degrees,
         "altitude": subpoint.elevation.km,
-        "velocity": velocity * 1000,
+        "velocity": velocity * 1000,  # Convert to m/s
         "distance": distance.km,
         "alt": alt.degrees,
         "az": az.degrees,

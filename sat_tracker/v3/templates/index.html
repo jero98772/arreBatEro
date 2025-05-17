@@ -239,7 +239,7 @@
 
         // Update satellite positions
         async function updatePositions() {
-            try {
+            
                 const response = await fetch(`${API_URL}/positions`);
                 if (!response.ok) throw new Error('Failed to fetch positions');
 
@@ -261,9 +261,7 @@
                 // Update last update time
                 document.getElementById('last-update').textContent = moment().format('YYYY-MM-DD HH:mm:ss');
 
-            } catch (error) {
-                console.error('Error updating positions:', error);
-            }
+            
         }
 
         // Update markers on the map
