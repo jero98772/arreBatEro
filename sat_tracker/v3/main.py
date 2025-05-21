@@ -1,11 +1,18 @@
 from flask import Flask, render_template, jsonify, request  # Add request here
 from flask_cors import CORS  # Import Flask-CORS
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from tools.tools import get_satellite_object, get_current_position, predict_satellite_positions, calculate_footprint_radius, is_satellite_in_sunlight
 from skyfield.api import load
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for the entire app
+# Configure CORS to allow requests from both localhost and 127.0.0.1
+CORS(app, resources={
+    r"/*": {
+        "origins": ["http://localhost:8000", "http://127.0.0.1:8000"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"]
+    }
+})
 ts = load.timescale()
 
 # Example TLE data - in a real application, you would fetch this dynamically
@@ -50,29 +57,39 @@ def get_satellites():
 
 @app.route("/positions")
 def get_positions():
-    now = ts.now()
-    positions_data = []  # Initialize the list first
-    
-    for name, satellite in SATELLITES.items():
-        position = get_current_position(
-            satellite, 
-            now,
-            observer_lat=6.223301, 
-            observer_lon=-75.5959321,
-            observer_elevation_m=1695
-        )
-        altitude = position['altitude']
-        positions_data.append({
-            "name": name,  # Added name for easier identification
-            "norad_id": TLE_DATA[name][1][2:7].lstrip('0'),
-            "latitude": position['latitude'],
-            "longitude": position['longitude'],
-            "altitude": altitude,
-            "velocity": position['velocity'],
-            "footprint_radius": calculate_footprint_radius(altitude),
-            "visible": is_satellite_in_sunlight(satellite, now)
-        })
-    return jsonify(positions_data)
+    try:
+        # Get current time using Skyfield's timescale
+        now = ts.now()  # This creates a Skyfield Time object directly
+        positions_data = []  # Initialize the list first
+        
+        for name, satellite in SATELLITES.items():
+            try:
+                position = get_current_position(
+                    satellite, 
+                    now,  # Pass the Skyfield Time object directly
+                    observer_lat=6.223301, 
+                    observer_lon=-75.5959321,
+                    observer_elevation_m=1695
+                )
+                altitude = position['altitude']
+                positions_data.append({
+                    "name": name,  # Added name for easier identification
+                    "norad_id": TLE_DATA[name][1][2:7].lstrip('0'),
+                    "latitude": position['latitude'],
+                    "longitude": position['longitude'],
+                    "altitude": altitude,
+                    "velocity": position['velocity'],
+                    "footprint_radius": calculate_footprint_radius(altitude),
+                    "visible": is_satellite_in_sunlight(satellite, now)
+                })
+            except Exception as e:
+                print(f"Error processing satellite {name}: {str(e)}")
+                continue
+                
+        return jsonify(positions_data)
+    except Exception as e:
+        print(f"Error in get_positions: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/predict/<norad_id>")
 def predict(norad_id):
