@@ -34,15 +34,10 @@ TLE_DATA = {
     ]
 }
 
-# Initialize satellites with proper names and TLE data
-SATELLITES = {}
-for name, tle in TLE_DATA.items():
-    try:
-        satellite = get_satellite_object(tle[1], tle[2], name, ts)
-        SATELLITES[name] = satellite
-        print(f"Initialized {name} with TLE data")
-    except Exception as e:
-        print(f"Error initializing {name}: {str(e)}")
+SATELLITES = {
+    name: get_satellite_object(tle[1], tle[2], name, ts)
+    for name, tle in TLE_DATA.items()
+}
 
 @app.route("/")
 def index():

@@ -31,13 +31,9 @@ def get_current_position(satellite, timestamp, observer_lat=6.223301, observer_l
         timestamp = ts.from_datetime(current_time)
     
     try:
-        # Get satellite position in geocentric coordinates
+        # Get satellite position
         geocentric = satellite.at(timestamp)
-        
-        # Convert to geographic coordinates (latitude, longitude, altitude)
         subpoint = wgs84.subpoint(geocentric)
-        
-        # Calculate velocity
         velocity = np.linalg.norm(geocentric.velocity.km_per_s)
         
         # Create observer position
@@ -48,26 +44,14 @@ def get_current_position(satellite, timestamp, observer_lat=6.223301, observer_l
         topocentric = difference.at(timestamp)
         alt, az, distance = topocentric.altaz()
         
-        # Check if satellite is in sunlight
-        is_visible = is_satellite_in_sunlight(satellite, timestamp)
-        
-        # Get the actual coordinates
-        lat = subpoint.latitude.degrees
-        lon = subpoint.longitude.degrees
-        alt_km = subpoint.elevation.km
-        
-        # Print coordinates for debugging
-        print(f"Satellite coordinates - Lat: {lat:.2f}°, Lon: {lon:.2f}°, Alt: {alt_km:.1f} km")
-        
         return {
-            "latitude": lat,
-            "longitude": lon,
-            "altitude": alt_km,
+            "latitude": subpoint.latitude.degrees,
+            "longitude": subpoint.longitude.degrees,
+            "altitude": subpoint.elevation.km,
             "velocity": velocity * 1000,  # Convert to m/s
             "distance": distance.km,
             "alt": alt.degrees,
             "az": az.degrees,
-            "visible": is_visible
         }
     except Exception as e:
         print(f"Error in get_current_position: {str(e)}")
@@ -107,31 +91,15 @@ def is_satellite_in_sunlight(satellite, timestamp):
     """
     Determines if a satellite is in sunlight at a given timestamp.
     """
-    try:
-        eph = load("de421.bsp")
-        sun = eph["sun"]
-        earth = eph["earth"]
-        
-        # Get the satellite's position at the given time
-        satellite_pos = satellite.at(timestamp)
-        
-        # Get Earth's position at the given time
-        earth_pos = earth.at(timestamp)
-        
-        # Get the Sun's position at the given time
-        sun_pos = sun.at(timestamp)
-        
-        # Calculate the angle between the satellite-Earth vector and the Sun-Earth vector
-        satellite_earth = satellite_pos - earth_pos
-        sun_earth = sun_pos - earth_pos
-        
-        # Calculate the angle between the vectors
-        angle = np.arccos(np.dot(satellite_earth.position.km, sun_earth.position.km) / 
-                         (np.linalg.norm(satellite_earth.position.km) * 
-                          np.linalg.norm(sun_earth.position.km)))
-        
-        # If the angle is less than 90 degrees, the satellite is in sunlight
-        return angle < np.pi/2
-    except Exception as e:
-        print(f"Error in is_satellite_in_sunlight: {str(e)}")
-        return True  # Default to visible if we can't determine
+    eph = load("de421.bsp")
+    sun = eph["sun"]
+    earth = eph["earth"]
+    
+    # Get the satellite's position at the given time
+    satellite_pos = satellite.at(timestamp)
+    
+    # Get Earth's position relative to the Sun
+    earth_pos = earth.at(timestamp)
+    
+    # Check if the satellite is in sunlight
+    return earth_pos.is_sunlit(satellite_pos)
