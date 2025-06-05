@@ -1,14 +1,10 @@
+#python main.py
 import jpype
-import jpype.imports
-# Start the JVM with the classpath to your JAR
-jpype.startJVM(classpath=["hello.jar"])
-# Load the Scala class
-Hello = jpype.JClass("Hello")
-hello = Hello()
-# Call methods
-print(hello.greet("Alice"))
-print(hello.sum(5, 7))
-# Shutdown the JVM
+jpype.startJVM(classpath=["."])
+Add = jpype.JClass("Add")
+adder = Add()
+result = adder.sum(5, 7)
+print(f"The result is: {result}")
 jpype.shutdownJVM()
 
 
