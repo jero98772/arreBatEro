@@ -32,6 +32,4 @@ M=M+1
 0;JMP"""
 result = assemble.invoke(test_code)
 print(f"The result is: {result}")
-"""
-"""
 jpype.shutdownJVM()

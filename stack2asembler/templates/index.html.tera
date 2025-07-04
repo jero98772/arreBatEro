@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hack Assembler Interface</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    textarea, #output { width: 100%; height: 150px; margin-top: 1rem; }
+    button { margin-top: 1rem; padding: 0.5rem 1rem; cursor: pointer;}
+  </style>
+</head>
+<body>
+
+  <h1>VM to Hack Assembler</h1>
+
+  <textarea id="inputBox">// Your VM code here
+push constant 7
+push constant 8
+add
+</textarea>
+  <br>
+
+  <button onclick="sendData()">Convert to Hack Assembly</button>
+
+  <h2>Hack Assembler Output</h2>
+  <div id="output" style="background:#f0f0f0; padding:1rem; white-space:pre; border: 1px solid #ddd;">Waiting for conversion...</div>
+
+  <script>
+    async function sendData() {
+      const inputText = document.getElementById("inputBox").value;
+      const outputDiv = document.getElementById("output");
+      outputDiv.textContent = "Converting..."; // Provide immediate feedback
+
+
+        const response = await fetch("/convert", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ vm_code: inputText }) // Send as JSON with 'vm_code' key
+        });
+
+        if (!response.ok) {
+          // Handle HTTP errors
+          const errorText = await response.text();
+          outputDiv.textContent = `Error: ${response.status} - ${errorText}`;
+          return;
+        }
+
+        const result = await response.text(); // Get the response as plain text (your assembly code)
+        outputDiv.textContent = result; // Display the assembly code
+    }
+  </script>
+
+</body>
+</html>

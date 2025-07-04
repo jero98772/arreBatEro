@@ -1,0 +1,11 @@
+# Cargo.toml
+[package]
+name = "rocket_example" # Or your project's name
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rocket = { version = "0.5.1", features = ["json"] } # <--- ADD THIS FEATURE
+rocket_dyn_templates = { version = "0.1.0", features = ["tera"] } # Or "handlebars", "askama" etc. depending on your template engine
+serde = { version = "1.0", features = ["derive"] } # Needed for Deserialize/Serialize macros
+serde_json = "1.0" # Often used with rocket::serde::json
