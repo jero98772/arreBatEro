@@ -1,11 +1,6 @@
-use std::env;
 use std::fs;
 use std::io::{self, Write};
-use std::path::{Path, PathBuf};
-use std::process;
-
-pub mod vm_translator;
-
+use std::path::Path;
 
 #[derive(Debug, Clone, PartialEq)]
 enum CommandType {
@@ -113,7 +108,7 @@ impl Parser {
     }
 }
 
-struct CodeWriter {
+pub struct CodeWriter {
     output_file: Box<dyn Write>,
     filename: String,
     label_counter: i32,
@@ -121,7 +116,7 @@ struct CodeWriter {
 }
 
 impl CodeWriter {
-    fn new(output_file: Box<dyn Write>) -> Self {
+    pub fn new(output_file: Box<dyn Write>) -> Self {
         CodeWriter {
             output_file,
             filename: String::new(),
@@ -328,7 +323,7 @@ impl CodeWriter {
         writeln!(self.output_file, "0;JMP")
     }
     
-    fn write_init(&mut self) -> io::Result<()> {
+    pub fn write_init(&mut self) -> io::Result<()> {
         // Set SP to 256
         writeln!(self.output_file, "@256")?;
         writeln!(self.output_file, "D=A")?;
@@ -493,7 +488,7 @@ impl CodeWriter {
     }
 }
 
-fn process_file(
+pub fn process_file(
     file_path: &Path,
     code_writer: &mut CodeWriter,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -550,68 +545,3 @@ fn process_file(
     
     Ok(())
 }
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let args: Vec<String> = env::args().collect();
-    
-    if args.len() != 2 {
-        eprintln!("Usage: {} <file.vm | directory>", args[0]);
-        process::exit(1);
-    }
-    
-    let input_path = Path::new(&args[1]);
-    
-    if input_path.is_file() {
-        // Single file translation
-        if input_path.extension().unwrap_or_default() != "vm" {
-            eprintln!("Error: Input file must have .vm extension");
-            process::exit(1);
-        }
-        
-        let output_path = input_path.with_extension("asm");
-        let output_file = fs::File::create(&output_path)?;
-        let mut code_writer = CodeWriter::new(Box::new(output_file));
-        
-        process_file(input_path, &mut code_writer)?;
-        
-    } else if input_path.is_dir() {
-        // Directory translation
-        let vm_files: Vec<PathBuf> = fs::read_dir(input_path)?
-            .filter_map(|entry| entry.ok())
-            .map(|entry| entry.path())
-            .filter(|path| path.extension().unwrap_or_default() == "vm")
-            .collect();
-        
-        if vm_files.is_empty() {
-            eprintln!("Error: No .vm files found in directory");
-            process::exit(1);
-        }
-        
-        let dir_name = input_path
-            .file_name()
-            .unwrap()
-            .to_string_lossy();
-        let output_path = input_path.join(format!("{}.asm", dir_name));
-        let output_file = fs::File::create(&output_path)?;
-        let mut code_writer = CodeWriter::new(Box::new(output_file));
-        
-        // Write bootstrap code for directory translation
-        code_writer.write_init()?;
-        
-        // Process all VM files in the directory (sorted)
-        let mut sorted_files = vm_files;
-        sorted_files.sort();
-        
-        for vm_file in sorted_files {
-            process_file(&vm_file, &mut code_writer)?;
-        }
-        
-    } else {
-        eprintln!("Error: Input path does not exist");
-        process::exit(1);
-    }
-    
-    println!("Translation completed successfully");
-    Ok(())
-}
-
