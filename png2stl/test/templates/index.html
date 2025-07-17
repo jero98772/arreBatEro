@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image to 3D Model</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        #upload-section {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #upload-section h1 {
+            color: #0055ff;
+            margin-bottom: 20px;
+        }
+        #upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        #upload-form input[type="file"] {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #upload-form button {
+            background-color: #0055ff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        #upload-form button:hover {
+            background-color: #0044cc;
+        }
+        #response-container {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #viewer-section {
+            display: none; /* Initially hidden */
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10; /* Ensure it's above other elements */
+            background-color: #f0f0f0; /* Match body background */
+        }
+        canvas { display: block; }
+        #close-viewer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 100; /* Above the canvas */
+        }
+        #close-viewer:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="upload-section">
+        <h1>Upload Image to Create 3D Model</h1>
+        <form id="upload-form">
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit">Upload and Convert</button>
+        </form>
+        <div id="response-container"></div>
+    </div>
+
+    <div id="viewer-section">
+        <button id="close-viewer">Close Viewer</button>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+        <script>
+            let scene, camera, renderer, controls, mesh;
+
+            function initViewer() {
+                // Clear any existing canvas
+                const existingCanvas = document.querySelector('#viewer-section canvas');
+                if (existingCanvas) {
+                    existingCanvas.remove();
+                }
+
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xf0f0f0); // Light gray background for contrast
+
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.getElementById('viewer-section').appendChild(renderer.domElement);
+
+                const light = new THREE.DirectionalLight(0xffffff, 1);
+                light.position.set(0, 0, 1).normalize();
+                scene.add(light);
+
+                const ambientLight = new THREE.AmbientLight(0x404040); // Soft ambient light
+                scene.add(ambientLight);
+
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.25;
+                controls.screenSpacePanning = false;
+                controls.minDistance = 5; // Allow zooming much closer
+                controls.maxDistance = 500;
+
+                animate();
+            }
+
+            function loadSTL(url) {
+                const loader = new THREE.STLLoader();
+                loader.load(url, function (geometry) {
+                    if (mesh) {
+                        scene.remove(mesh);
+                        geometry.dispose();
+                    }
+                    // Changed material color to a vibrant green
+                    const material = new THREE.MeshPhongMaterial({ color: 0x00cc00, specular: 0x111111, shininess: 200 });
+                    mesh = new THREE.Mesh(geometry, material);
+                    mesh.rotation.x = -Math.PI / 2;
+                    scene.add(mesh);
+
+                    geometry.computeBoundingBox();
+                    const boundingBox = geometry.boundingBox;
+                    const center = new THREE.Vector3();
+                    boundingBox.getCenter(center);
+                    mesh.geometry.translate(-center.x, -center.y, -center.z);
+
+                    const size = new THREE.Vector3();
+                    boundingBox.getSize(size);
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    // Adjusted camera distance for a more "zoomed-in" initial view
+                    camera.position.z = maxDim * 0.8; // Closer initial zoom
+                    camera.position.y = maxDim * 0.3; // Slightly elevated view
+                    camera.lookAt(0, 0, 0);
+
+                    controls.target.set(0, 0, 0);
+                    controls.update();
+
+                    document.getElementById('viewer-section').style.display = 'block';
+                },
+                function (xhr) {
+                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                },
+                function (error) {
+                    console.error('An error happened while loading the STL:', error);
+                    alert('Failed to load the STL model. Please try again or check the server logs.');
+                    document.getElementById('viewer-section').style.display = 'none';
+                });
+            }
+
+            const animate = function () {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            };
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            document.getElementById('upload-form').addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const responseContainer = document.getElementById('response-container');
+
+                responseContainer.innerHTML = 'Uploading and converting...';
+                try {
+                    const response = await fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const textResponse = await response.text();
+                        responseContainer.innerHTML = textResponse;
+
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(textResponse, 'text/html');
+                        const downloadLink = doc.querySelector('a[href*="/download/"]');
+
+                        if (downloadLink) {
+                            const stlUrl = downloadLink.href;
+                            const fullStlUrl = new URL(stlUrl, window.location.origin).href;
+
+                            initViewer();
+                            loadSTL(fullStlUrl);
+                        } else {
+                            responseContainer.innerHTML += '<br>No download link found in response.';
+                        }
+                    } else {
+                        responseContainer.innerHTML = `Error: ${response.status} ${response.statusText}`;
+                    }
+                } catch (error) {
+                    responseContainer.innerHTML = `Network error: ${error}`;
+                    console.error('Network error:', error);
+                }
+            });
+
+            document.getElementById('close-viewer').addEventListener('click', () => {
+                document.getElementById('viewer-section').style.display = 'none';
+                if (renderer) {
+                    renderer.dispose();
+                    renderer.domElement.remove();
+                    scene = null;
+                    camera = null;
+                    renderer = null;
+                    controls = null;
+                    mesh = null;
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

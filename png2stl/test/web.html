@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>STL Viewer</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- Compatible Three.js version -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(0, 0, 1).normalize();
+  scene.add(light);
+
+  const loader = new THREE.STLLoader(); // ✅ This will now work
+  loader.load('Solid.stl', function (geometry) {
+    const material = new THREE.MeshPhongMaterial({ color: 0x0055ff });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.rotation.x = -Math.PI / 2;
+    scene.add(mesh);
+    camera.position.z = 100;
+
+    const animate = function () {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    };
+    animate();
+  });
+
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+</script>
+</body>
+</html>
