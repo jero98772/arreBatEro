@@ -5,7 +5,7 @@ class SchedulerAnimation {
         this.isPlaying = false;
         this.animationSpeed = 5;
         this.animationInterval = null;
-        this.currentTasks = new Map(); // Track currently running tasks per core
+        this.currentTasks = new Map();
         
         this.initializeElements();
         this.bindEvents();
@@ -28,8 +28,10 @@ class SchedulerAnimation {
         this.avgWaitingTimeEl = document.getElementById('avgWaitingTime');
         this.avgTurnaroundTimeEl = document.getElementById('avgTurnaroundTime');
         
-        // Core elements
-        this.coreWrappers = document.querySelectorAll('.core-wrapper');
+        // REMOVED: this.coreWrappers = document.querySelectorAll('.core-wrapper');
+    }
+    getCoreWrappers() {
+        return document.querySelectorAll('.core-wrapper');
     }
     
     bindEvents() {
@@ -47,38 +49,38 @@ class SchedulerAnimation {
         });
     }
     
-async startSimulation() {
-    this.startBtn.disabled = true;
-    this.startBtn.textContent = 'Loading...';
-    
-    // Get parameters from form inputs
-    const numCores = document.getElementById('core-input').value;
-    const numTasks = document.getElementById('task-input').value;
-    const forkProb = document.getElementById('fork-input').value;
-    
-    // Build URL with query parameters
-    const url = new URL('/simulate', window.location.origin);
-    url.searchParams.append('num_cores', numCores);
-    url.searchParams.append('num_tasks', numTasks);
-    url.searchParams.append('fork_prob', forkProb);
-    
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    this.animationData = data.animation_data;
-    this.metrics = data.metrics;
-    this.totalFramesEl.textContent = this.animationData.length;
-    
-    this.updateMetrics();
-    this.resetAnimation();
-    this.playAnimation();
-    
-    this.startBtn.textContent = 'Start Simulation';
-    this.startBtn.disabled = false;
-    this.pauseBtn.disabled = false;
-    this.resetBtn.disabled = false;
-}    
-    playAnimation() {
+   async startSimulation() {
+        this.startBtn.disabled = true;
+        this.startBtn.textContent = 'Loading...';
+        
+        // Get parameters from form inputs
+        const numCores = document.getElementById('core-input').value;
+        const numTasks = document.getElementById('task-input').value;
+        const forkProb = document.getElementById('fork-input').value;
+        
+        // Build URL with query parameters
+        const url = new URL('/simulate', window.location.origin);
+        url.searchParams.append('num_cores', numCores);
+        url.searchParams.append('num_tasks', numTasks);
+        url.searchParams.append('fork_prob', forkProb);
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        this.animationData = data.animation_data;
+        this.metrics = data.metrics;
+        this.totalFramesEl.textContent = this.animationData.length;
+        
+        this.updateMetrics();
+        this.resetAnimation();
+        this.playAnimation();
+        
+        this.startBtn.textContent = 'Start Simulation';
+        this.startBtn.disabled = false;
+        this.pauseBtn.disabled = false;
+        this.resetBtn.disabled = false;
+    }    
+playAnimation() {
         if (this.animationData.length === 0) return;
         
         this.isPlaying = true;
@@ -117,22 +119,32 @@ async startSimulation() {
         this.currentTimeEl.textContent = '0';
         this.currentTasks.clear();
         
+        // Get current core wrappers
+        const coreWrappers = this.getCoreWrappers();
+        
         // Reset all cores to initial state
-        this.coreWrappers.forEach((wrapper, coreId) => {
+        coreWrappers.forEach((wrapper, index) => {
             this.updateCoreDisplay(wrapper, {
-                id: coreId,
+                id: index,
                 idle: true,
                 queue_size: 0,
                 tasks: []
             }, null);
         });
-    }
-    
-    renderFrame(frame) {
+    }    
+        renderFrame(frame) {
         this.currentTimeEl.textContent = frame.time.toFixed(2);
         
+        // Get current core wrappers
+        const coreWrappers = this.getCoreWrappers();
+        
         frame.cores.forEach((core, index) => {
-            const wrapper = this.coreWrappers[index];
+            if (index >= coreWrappers.length) {
+                console.error(`Core index ${index} is out of bounds. Only ${coreWrappers.length} cores exist.`);
+                return;
+            }
+            
+            const wrapper = coreWrappers[index];
             const runningTask = this.findRunningTask(core);
             this.updateCoreDisplay(wrapper, core, runningTask);
         });
@@ -322,14 +334,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const scheduler = new SchedulerAnimation();
     
     // Add some interactive hover effects
-    document.querySelectorAll('.state-circle').forEach(circle => {
-        circle.addEventListener('mouseenter', () => {
-            circle.style.transform = 'scale(1.1)';
-        });
-        
-        circle.addEventListener('mouseleave', () => {
-            circle.style.transform = 'scale(1)';
-        });
+    document.addEventListener('mouseover', (e) => {
+        if (e.target.classList.contains('state-circle')) {
+            e.target.style.transform = 'scale(1.1)';
+        }
+    });
+    
+    document.addEventListener('mouseout', (e) => {
+        if (e.target.classList.contains('state-circle')) {
+            e.target.style.transform = 'scale(1)';
+        }
     });
     
     // Add keyboard shortcuts
@@ -351,34 +365,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-        function createCoreElement(coreId) {
-            const coreWrapper = document.createElement('div');
-            coreWrapper.className = 'core-wrapper';
-            coreWrapper.dataset.core = coreId;
-            coreWrapper.innerHTML = `
-                <h3>Core ${coreId}</h3>
-                <div class="process-diagram">
-                    <div class="state-circle new">New</div>
-                    <div class="state-circle ready">Ready</div>
-                    <div class="state-circle running">Running</div>
-                    <div class="state-circle waiting">Waiting</div>
-                    <div class="state-circle terminated">Terminated</div>
-                    <div class="arrows">
-                        <div class="arrow new-to-ready"></div>
-                        <div class="arrow ready-to-running"></div>
-                        <div class="arrow running-to-waiting"></div>
-                        <div class="arrow waiting-to-ready"></div>
-                        <div class="arrow running-to-terminated"></div>
-                    </div>
-                </div>
-                <div class="core-info">
-                    <div class="status">Status: <span class="core-status">Idle</span></div>
-                    <div class="queue-size">Queue: <span class="queue-count">0</span> tasks</div>
-                    <div class="current-task">Current: <span class="task-id">None</span></div>
-                </div>
-            `;
-            return coreWrapper;
-        }
+
+function createCoreElement(coreId) {
+    const coreWrapper = document.createElement('div');
+    coreWrapper.className = 'core-wrapper';
+    coreWrapper.dataset.core = coreId;
+    coreWrapper.innerHTML = `
+        <h3>Core ${coreId}</h3>
+        <div class="process-diagram">
+            <div class="state-circle new">New</div>
+            <div class="state-circle ready">Ready</div>
+            <div class="state-circle running">Running</div>
+            <div class="state-circle waiting">Waiting</div>
+            <div class="state-circle terminated">Terminated</div>
+            <div class="arrows">
+                <div class="arrow new-to-ready"></div>
+                <div class="arrow ready-to-running"></div>
+                <div class="arrow running-to-waiting"></div>
+                <div class="arrow waiting-to-ready"></div>
+                <div class="arrow running-to-terminated"></div>
+            </div>
+        </div>
+        <div class="core-info">
+            <div class="status">Status: <span class="core-status">Idle</span></div>
+            <div class="queue-size">Queue: <span class="queue-count">0</span> tasks</div>
+            <div class="current-task">Current: <span class="task-id">None</span></div>
+        </div>
+    `;
+    return coreWrapper;
+}
 
         // Function to initialize cores based on user input
         function initializeCores(numCores) {

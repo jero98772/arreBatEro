@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multicore Task Scheduler Visualization</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <div class="container">
@@ -16,11 +16,11 @@
         <div class="param-controls">
             <div class="param-group">
                 <label for="core-input">CPU Cores:</label>
-                <input type="number" id="core-input" min="1" max="16" value="4">
+                <input type="number" id="core-input" min="1" max="32" value="4">
             </div>
             <div class="param-group">
                 <label for="task-input">Initial Tasks:</label>
-                <input type="number" id="task-input" min="1" max="100" value="20">
+                <input type="number" id="task-input" min="1" max="1000" value="20">
             </div>
             <div class="param-group">
                 <label for="fork-input">Fork Probability:</label>
