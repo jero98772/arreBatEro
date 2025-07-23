@@ -1,0 +1,230 @@
+/* Calculator Styles */
+body {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.calculator-container {
+  display: flex;
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.calculator {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: 320px;
+}
+
+.calculator h1 {
+  color: white;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.display {
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: right;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.display-value {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: -1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height: 1.2em;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.calc-button {
+  flex: 1;
+  height: 60px;
+  border: none;
+  border-radius: 15px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.calc-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.calc-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.calc-button.operator {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+}
+
+.calc-button.equals {
+  background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+  color: white;
+}
+
+.calc-button.clear {
+  background: linear-gradient(135deg, #ffa726, #ff7043);
+  color: white;
+}
+
+.calc-button.zero {
+  flex: 2;
+}
+
+/* History Panel */
+.history-panel {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: 300px;
+  max-height: 500px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.history-header h3 {
+  color: white;
+  margin: 0;
+  font-weight: 600;
+}
+
+.clear-history-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-history-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.history-list {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 5px;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.history-entry {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+}
+
+.history-entry:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.calculation {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.result {
+  color: #4ecdc4;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.timestamp {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+}
+
+.no-history {
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .calculator-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  .calculator,
+  .history-panel {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .calc-button {
+    height: 50px;
+    font-size: 1.3rem;
+  }
+  
+  .display-value {
+    font-size: 2rem;
+  }
+}
