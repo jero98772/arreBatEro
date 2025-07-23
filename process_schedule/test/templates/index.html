@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multicore Task Scheduler Visualization</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Multicore Task Scheduler Visualization</h1>
+            <p>Watch how tasks flow through different processor states in a multicore system</p>
+        </header>
+        
+        <div class="param-controls">
+            <div class="param-group">
+                <label for="core-input">CPU Cores:</label>
+                <input type="number" id="core-input" min="1" max="16" value="4">
+            </div>
+            <div class="param-group">
+                <label for="task-input">Initial Tasks:</label>
+                <input type="number" id="task-input" min="1" max="100" value="20">
+            </div>
+            <div class="param-group">
+                <label for="fork-input">Fork Probability:</label>
+                <input type="number" id="fork-input" min="0" max="1" step="0.1" value="0.2">
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn" class="btn btn-primary">Start Simulation</button>
+            <button id="pauseBtn" class="btn btn-secondary" disabled>Pause</button>
+            <button id="resetBtn" class="btn btn-danger" disabled>Reset</button>
+            <div class="speed-control">
+                <label for="speedSlider">Animation Speed:</label>
+                <input type="range" id="speedSlider" min="1" max="10" value="5">
+                <span id="speedValue">5x</span>
+            </div>
+        </div>
+        
+        <div class="time-info">
+            <div class="time-display">
+                <span>Time: <span id="currentTime">0</span></span>
+                <span>Frame: <span id="currentFrame">0</span> / <span id="totalFrames">0</span></span>
+            </div>
+        </div>
+        
+        <!-- Cores will be dynamically generated here -->
+        <div id="cores-container" class="cores-container">
+            <!-- Core elements will be created by JavaScript -->
+        </div>
+        
+        <div class="metrics-panel">
+            <h3>Performance Metrics</h3>
+            <div class="metrics-grid">
+                <div class="metric">
+                    <span class="metric-label">Completed Tasks:</span>
+                    <span id="completedTasks">0</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Steal Attempts:</span>
+                    <span id="stealAttempts">0</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Throughput:</span>
+                    <span id="throughput">0.00</span> tasks/time
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Avg Waiting Time:</span>
+                    <span id="avgWaitingTime">0.00</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Avg Turnaround Time:</span>
+                    <span id="avgTurnaroundTime">0.00</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <h4>Process States Legend</h4>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color new"></div>
+                    <span>New - Process is being created</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color ready"></div>
+                    <span>Ready - Process is ready to execute</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color running"></div>
+                    <span>Running - Process is being executed</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color waiting"></div>
+                    <span>Waiting - Process is waiting for I/O</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color terminated"></div>
+                    <span>Terminated - Process has finished</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script src="/static/script.js"></script>
+</body>
+</html>
