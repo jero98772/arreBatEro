@@ -355,7 +355,7 @@ header p {
     font-size: 0.9em;
 }
 
-.task-id {
+.task-id {z
     background: #2c3e50;
     color: white;
     padding: 2px 8px;
