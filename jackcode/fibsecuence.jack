@@ -1,0 +1,45 @@
+class Fibonacci {
+    function void main() {
+        var int n, i, first, second, next;
+        
+        do Output.printString("Fibonacci Sequence Generator");
+        do Output.println();
+        do Output.printString("Enter number of terms: ");
+        let n = Keyboard.readInt("");
+        
+        if (n < 1) {
+            do Output.printString("Please enter a positive number.");
+            do Output.println();
+            return;
+        }
+        
+        do Output.println();
+        do Output.printString("Fibonacci Sequence:");
+        do Output.println();
+        
+        if (n > 0) {
+            let first = 0;
+            do Output.printInt(first);
+            do Output.printString(" ");
+        }
+        
+        if (n > 1) {
+            let second = 1;
+            do Output.printInt(second);
+            do Output.printString(" ");
+        }
+        
+        let i = 3;
+        while (i < (n + 1)) {
+            let next = first + second;
+            do Output.printInt(next);
+            do Output.printString(" ");
+            let first = second;
+            let second = next;
+            let i = i + 1;
+        }
+        
+        do Output.println();
+        return;
+    }
+}

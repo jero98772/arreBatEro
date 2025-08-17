@@ -1,0 +1,50 @@
+class PrimeChecker {
+    function boolean isPrime(int n) {
+        var int i;
+        var boolean prime;
+        
+        if (n < 2) {
+            return false;
+        }
+        if (n = 2) {
+            return true;
+        }
+        if ((n / 2) * 2 = n) { // Check if even
+            return false;
+        }
+        
+        let prime = true;
+        let i = 3;
+        while ((i * i) < (n + 1)) {
+            if ((n / i) * i = n) { // Check if divisible
+                let prime = false;
+                let i = n; // Break the loop
+            }
+            let i = i + 2;
+        }
+        
+        return prime;
+    }
+    
+    function void main() {
+        var int number;
+        var boolean result;
+        
+        do Output.printString("Prime Number Checker");
+        do Output.println();
+        do Output.printString("Enter a number: ");
+        let number = Keyboard.readInt("");
+        
+        let result = PrimeChecker.isPrime(number);
+        
+        do Output.printInt(number);
+        if (result) {
+            do Output.printString(" is a prime number.");
+        } else {
+            do Output.printString(" is not a prime number.");
+        }
+        do Output.println();
+        
+        return;
+    }
+}

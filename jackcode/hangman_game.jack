@@ -1,0 +1,248 @@
+// Funciones estadísticas en Jack
+
+class Estadisticas {
+
+    // Función para calcular la media manualmente
+    function int my_mean(Array x) {
+        var int i, sum, n;
+        let sum = 0;
+        let n = x.size();
+        let i = 0;
+        
+        while (i < n) {
+            let sum = sum + x.get(i);
+            let i = i + 1;
+        }
+        
+        return sum / n;
+    }
+
+    // Función wrapper para media usando función integrada
+    function int media(Array x) {
+        return Math.mean(x);  // Asumiendo que existe una función mean en Jack
+    }
+
+    // Función para calcular mediana manualmente
+    function int my_median(Array x) {
+        var Array x_ordered;
+        var int n, mitad1, mitad2;
+        
+        let x_ordered = sort(x);
+        let n = x_ordered.size();
+        
+        if (Math.mod(n, 2) = 1) {
+            return x_ordered.get((n + 1) / 2);
+        } else {
+            let mitad1 = x_ordered.get(n / 2);
+            let mitad2 = x_ordered.get((n / 2) + 1);
+            return (mitad1 + mitad2) / 2;
+        }
+    }
+
+    // Función wrapper para mediana usando función integrada
+    function int mediana(Array x) {
+        return Math.median(x);  // Asumiendo que existe una función median en Jack
+    }
+
+    // Función para calcular la moda
+    function int moda(Array x) {
+        var Array unique_vals, frequencies;
+        var int i, j, max_freq, mode_val, current_freq;
+        
+        let unique_vals = getUnique(x);
+        let frequencies = Array.new(unique_vals.size());
+        let max_freq = 0;
+        let mode_val = 0;
+        let i = 0;
+        
+        // Calcular frecuencias
+        while (i < unique_vals.size()) {
+            let current_freq = 0;
+            let j = 0;
+            
+            while (j < x.size()) {
+                if (x.get(j) = unique_vals.get(i)) {
+                    let current_freq = current_freq + 1;
+                }
+                let j = j + 1;
+            }
+            
+            do frequencies.set(i, current_freq);
+            
+            if (current_freq > max_freq) {
+                let max_freq = current_freq;
+                let mode_val = unique_vals.get(i);
+            }
+            
+            let i = i + 1;
+        }
+        
+        return mode_val;
+    }
+
+    // Función alternativa para moda (implementación simplificada)
+    function int my_mode(Array x) {
+        // Nota: Jack no tiene estructuras de datos como hashtables
+        // Esta sería una implementación simplificada
+        return moda(x);
+    }
+
+    // Función para calcular el rango
+    function int rango(Array x) {
+        return Math.max(x) - Math.min(x);
+    }
+
+    // Función para calcular varianza manualmente
+    function int varianza_manual(Array x) {
+        var int i, n, suma, mean_val, diff;
+        
+        let n = x.size();
+        let mean_val = my_mean(x);
+        let suma = 0;
+        let i = 0;
+        
+        while (i < n) {
+            let diff = x.get(i) - mean_val;
+            let suma = suma + (diff * diff);
+            let i = i + 1;
+        }
+        
+        return suma / (n - 1);
+    }
+
+    // Función para calcular desviación estándar manualmente
+    function int desviacion_estandar_manual(Array x) {
+        return Math.sqrt(varianza_manual(x));
+    }
+
+    // Función wrapper para varianza usando función integrada
+    function int varianza(Array x) {
+        return Math.var(x);  // Asumiendo que existe una función var en Jack
+    }
+
+    // Función wrapper para desviación estándar usando función integrada
+    function int desviacion_estandar(Array x) {
+        return Math.sd(x);  // Asumiendo que existe una función sd en Jack
+    }
+
+    // Función para calcular cuantiles manualmente
+    function Array quantile_manual(Array x, Array x_ordered, Array probs) {
+        var int i, n, pos, k, delta, valor;
+        var Array res;
+        
+        let n = x.size();
+        let res = Array.new(probs.size());
+        let i = 0;
+        
+        while (i < probs.size()) {
+            let pos = (probs.get(i) * (n - 1)) + 1;
+            let k = Math.floor(pos);
+            let delta = pos - k;
+            
+            if (k < n) {
+                let valor = x_ordered.get(k) + (delta * (x_ordered.get(k + 1) - x_ordered.get(k)));
+            } else {
+                let valor = x_ordered.get(n);
+            }
+            
+            do res.set(i, valor);
+            let i = i + 1;
+        }
+        
+        return res;
+    }
+
+    // Función para calcular percentil
+    function int percentil(Array x, int p) {
+        var Array x_ordered, prob_array, result;
+        
+        let x_ordered = sort(x);
+        let prob_array = Array.new(1);
+        do prob_array.set(0, p / 100);
+        
+        let result = quantile_manual(x, x_ordered, prob_array);
+        return result.get(0);
+    }
+
+    // Función auxiliar para ordenar array (implementación de bubble sort)
+    function Array sort(Array x) {
+        var Array sorted;
+        var int i, j, n, temp;
+        var boolean swapped;
+        
+        let n = x.size();
+        let sorted = Array.new(n);
+        let i = 0;
+        
+        // Copiar array original
+        while (i < n) {
+            do sorted.set(i, x.get(i));
+            let i = i + 1;
+        }
+        
+        // Bubble sort
+        let i = 0;
+        while (i < (n - 1)) {
+            let swapped = false;
+            let j = 0;
+            
+            while (j < (n - i - 1)) {
+                if (sorted.get(j) > sorted.get(j + 1)) {
+                    let temp = sorted.get(j);
+                    do sorted.set(j, sorted.get(j + 1));
+                    do sorted.set(j + 1, temp);
+                    let swapped = true;
+                }
+                let j = j + 1;
+            }
+            
+            if (~swapped) {
+                return sorted;
+            }
+            let i = i + 1;
+        }
+        
+        return sorted;
+    }
+
+    // Función auxiliar para obtener valores únicos
+    function Array getUnique(Array x) {
+        var Array unique;
+        var int i, j, n, unique_count;
+        var boolean found;
+        
+        let n = x.size();
+        let unique = Array.new(n);  // Tamaño máximo posible
+        let unique_count = 0;
+        let i = 0;
+        
+        while (i < n) {
+            let found = false;
+            let j = 0;
+            
+            while (j < unique_count) {
+                if (unique.get(j) = x.get(i)) {
+                    let found = true;
+                }
+                let j = j + 1;
+            }
+            
+            if (~found) {
+                do unique.set(unique_count, x.get(i));
+                let unique_count = unique_count + 1;
+            }
+            
+            let i = i + 1;
+        }
+        
+        // Crear array del tamaño correcto
+        let unique = Array.new(unique_count);
+        let i = 0;
+        while (i < unique_count) {
+            do unique.set(i, unique.get(i));
+            let i = i + 1;
+        }
+        
+        return unique;
+    }
+}

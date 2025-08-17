@@ -1,0 +1,544 @@
+function Estadisticas.my_mean 3
+push constant 0
+pop local 1
+push argument 0
+call Array.size 1
+pop local 2
+push constant 0
+pop local 0
+label LABEL_0
+push local 0
+push local 2
+lt
+not
+if-goto LABEL_1
+push local 1
+push argument 0
+push local 0
+call Array.get 2
+add
+pop local 1
+push local 0
+push constant 1
+add
+pop local 0
+goto LABEL_0
+label LABEL_1
+push local 1
+push local 2
+call Math.divide 2
+return
+function Estadisticas.media 0
+push argument 0
+call Math.mean 1
+return
+function Estadisticas.my_median 4
+push pointer 0
+push argument 0
+call Estadisticas.sort 2
+pop local 0
+push local 0
+call Array.size 1
+pop local 1
+push local 1
+push constant 2
+call Math.mod 2
+push constant 1
+eq
+not
+if-goto LABEL_2
+push local 0
+push local 1
+push constant 1
+add
+push constant 2
+call Math.divide 2
+call Array.get 2
+return
+goto LABEL_3
+label LABEL_2
+push local 0
+push local 1
+push constant 2
+call Math.divide 2
+call Array.get 2
+pop local 2
+push local 0
+push local 1
+push constant 2
+call Math.divide 2
+push constant 1
+add
+call Array.get 2
+pop local 3
+push local 2
+push local 3
+add
+push constant 2
+call Math.divide 2
+return
+label LABEL_3
+function Estadisticas.mediana 0
+push argument 0
+call Math.median 1
+return
+function Estadisticas.moda 7
+push pointer 0
+push argument 0
+call Estadisticas.getUnique 2
+pop local 0
+push local 0
+call Array.size 1
+call Array.new 1
+pop local 1
+push constant 0
+pop local 4
+push constant 0
+pop local 5
+push constant 0
+pop local 2
+label LABEL_4
+push local 2
+push local 0
+call Array.size 1
+lt
+not
+if-goto LABEL_5
+push constant 0
+pop local 6
+push constant 0
+pop local 3
+label LABEL_6
+push local 3
+push argument 0
+call Array.size 1
+lt
+not
+if-goto LABEL_7
+push argument 0
+push local 3
+call Array.get 2
+push local 0
+push local 2
+call Array.get 2
+eq
+not
+if-goto LABEL_8
+push local 6
+push constant 1
+add
+pop local 6
+goto LABEL_9
+label LABEL_8
+label LABEL_9
+push local 3
+push constant 1
+add
+pop local 3
+goto LABEL_6
+label LABEL_7
+push local 1
+push local 2
+push local 6
+call Array.set 3
+pop temp 0
+push local 6
+push local 4
+gt
+not
+if-goto LABEL_10
+push local 6
+pop local 4
+push local 0
+push local 2
+call Array.get 2
+pop local 5
+goto LABEL_11
+label LABEL_10
+label LABEL_11
+push local 2
+push constant 1
+add
+pop local 2
+goto LABEL_4
+label LABEL_5
+push local 5
+return
+function Estadisticas.my_mode 0
+push pointer 0
+push argument 0
+call Estadisticas.moda 2
+return
+function Estadisticas.rango 0
+push argument 0
+call Math.max 1
+push argument 0
+call Math.min 1
+sub
+return
+function Estadisticas.varianza_manual 5
+push argument 0
+call Array.size 1
+pop local 1
+push pointer 0
+push argument 0
+call Estadisticas.my_mean 2
+pop local 3
+push constant 0
+pop local 2
+push constant 0
+pop local 0
+label LABEL_12
+push local 0
+push local 1
+lt
+not
+if-goto LABEL_13
+push argument 0
+push local 0
+call Array.get 2
+push local 3
+sub
+pop local 4
+push local 2
+push local 4
+push local 4
+call Math.multiply 2
+add
+pop local 2
+push local 0
+push constant 1
+add
+pop local 0
+goto LABEL_12
+label LABEL_13
+push local 2
+push local 1
+push constant 1
+sub
+call Math.divide 2
+return
+function Estadisticas.desviacion_estandar_manual 0
+push pointer 0
+push argument 0
+call Estadisticas.varianza_manual 2
+call Math.sqrt 1
+return
+function Estadisticas.varianza 0
+push argument 0
+call Math.var 1
+return
+function Estadisticas.desviacion_estandar 0
+push argument 0
+call Math.sd 1
+return
+function Estadisticas.quantile_manual 7
+push argument 0
+call Array.size 1
+pop local 1
+push argument 2
+call Array.size 1
+call Array.new 1
+pop local 6
+push constant 0
+pop local 0
+label LABEL_14
+push local 0
+push argument 2
+call Array.size 1
+lt
+not
+if-goto LABEL_15
+push argument 2
+push local 0
+call Array.get 2
+push local 1
+push constant 1
+sub
+call Math.multiply 2
+push constant 1
+add
+pop local 2
+push local 2
+call Math.floor 1
+pop local 3
+push local 2
+push local 3
+sub
+pop local 4
+push local 3
+push local 1
+lt
+not
+if-goto LABEL_16
+push argument 1
+push local 3
+call Array.get 2
+push local 4
+push argument 1
+push local 3
+push constant 1
+add
+call Array.get 2
+push argument 1
+push local 3
+call Array.get 2
+sub
+call Math.multiply 2
+add
+pop local 5
+goto LABEL_17
+label LABEL_16
+push argument 1
+push local 1
+call Array.get 2
+pop local 5
+label LABEL_17
+push local 6
+push local 0
+push local 5
+call Array.set 3
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto LABEL_14
+label LABEL_15
+push local 6
+return
+function Estadisticas.percentil 3
+push pointer 0
+push argument 0
+call Estadisticas.sort 2
+pop local 0
+push constant 1
+call Array.new 1
+pop local 1
+push local 1
+push constant 0
+push argument 1
+push constant 100
+call Math.divide 2
+call Array.set 3
+pop temp 0
+push pointer 0
+push argument 0
+push local 0
+push local 1
+call Estadisticas.quantile_manual 4
+pop local 2
+push local 2
+push constant 0
+call Array.get 2
+return
+function Estadisticas.sort 6
+push argument 0
+call Array.size 1
+pop local 3
+push local 3
+call Array.new 1
+pop local 0
+push constant 0
+pop local 1
+label LABEL_18
+push local 1
+push local 3
+lt
+not
+if-goto LABEL_19
+push local 0
+push local 1
+push argument 0
+push local 1
+call Array.get 2
+call Array.set 3
+pop temp 0
+push local 1
+push constant 1
+add
+pop local 1
+goto LABEL_18
+label LABEL_19
+push constant 0
+pop local 1
+label LABEL_20
+push local 1
+push local 3
+push constant 1
+sub
+lt
+not
+if-goto LABEL_21
+push constant 0
+pop local 5
+push constant 0
+pop local 2
+label LABEL_22
+push local 2
+push local 3
+push local 1
+sub
+push constant 1
+sub
+lt
+not
+if-goto LABEL_23
+push local 0
+push local 2
+call Array.get 2
+push local 0
+push local 2
+push constant 1
+add
+call Array.get 2
+gt
+not
+if-goto LABEL_24
+push local 0
+push local 2
+call Array.get 2
+pop local 4
+push local 0
+push local 2
+push local 0
+push local 2
+push constant 1
+add
+call Array.get 2
+call Array.set 3
+pop temp 0
+push local 0
+push local 2
+push constant 1
+add
+push local 4
+call Array.set 3
+pop temp 0
+push constant 0
+not
+pop local 5
+goto LABEL_25
+label LABEL_24
+label LABEL_25
+push local 2
+push constant 1
+add
+pop local 2
+goto LABEL_22
+label LABEL_23
+push local 5
+not
+not
+if-goto LABEL_26
+push local 0
+return
+goto LABEL_27
+label LABEL_26
+label LABEL_27
+push local 1
+push constant 1
+add
+pop local 1
+goto LABEL_20
+label LABEL_21
+push local 0
+return
+function Estadisticas.getUnique 6
+push argument 0
+call Array.size 1
+pop local 3
+push local 3
+call Array.new 1
+pop local 0
+push constant 0
+pop local 4
+push constant 0
+pop local 1
+label LABEL_28
+push local 1
+push local 3
+lt
+not
+if-goto LABEL_29
+push constant 0
+pop local 5
+push constant 0
+pop local 2
+label LABEL_30
+push local 2
+push local 4
+lt
+not
+if-goto LABEL_31
+push local 0
+push local 2
+call Array.get 2
+push argument 0
+push local 1
+call Array.get 2
+eq
+not
+if-goto LABEL_32
+push constant 0
+not
+pop local 5
+goto LABEL_33
+label LABEL_32
+label LABEL_33
+push local 2
+push constant 1
+add
+pop local 2
+goto LABEL_30
+label LABEL_31
+push local 5
+not
+not
+if-goto LABEL_34
+push local 0
+push local 4
+push argument 0
+push local 1
+call Array.get 2
+call Array.set 3
+pop temp 0
+push local 4
+push constant 1
+add
+pop local 4
+goto LABEL_35
+label LABEL_34
+label LABEL_35
+push local 1
+push constant 1
+add
+pop local 1
+goto LABEL_28
+label LABEL_29
+push local 4
+call Array.new 1
+pop local 0
+push constant 0
+pop local 1
+label LABEL_36
+push local 1
+push local 4
+lt
+not
+if-goto LABEL_37
+push local 0
+push local 1
+push local 0
+push local 1
+call Array.get 2
+call Array.set 3
+pop temp 0
+push local 1
+push constant 1
+add
+pop local 1
+goto LABEL_36
+label LABEL_37
+push local 0
+return

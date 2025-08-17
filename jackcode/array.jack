@@ -1,0 +1,23 @@
+class ArrayTest {
+    function void main() {
+        var Array arr;
+        var int i;
+        
+        let arr = Array.new(5);
+        let i = 0;
+        
+        while (i < 5) {
+            let arr[i] = i * 2;
+            let i = i + 1;
+        }
+        
+        let i = 0;
+        while (i < 5) {
+            do Output.printInt(arr[i]);
+            let i = i + 1;
+        }
+        
+        do arr.dispose();
+        return;
+    }
+}

@@ -1,0 +1,6 @@
+class Main {
+    function void main() {
+        do Output.printInt((3 * 2) + 1);
+        return;
+    }
+}

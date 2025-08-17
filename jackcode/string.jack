@@ -1,0 +1,9 @@
+class StringTest {
+    function void main() {
+        var String message;
+        let message = "Hello, World!";
+        do Output.printString(message);
+        do Output.println();
+        return;
+    }
+}

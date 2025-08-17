@@ -1,0 +1,52 @@
+class Calculator {
+    function void main() {
+        var int a, b, choice, result;
+        
+        do Output.printString("Simple Calculator");
+        do Output.println();
+        do Output.printString("1. Addition (+)");
+        do Output.println();
+        do Output.printString("2. Subtraction (-)");
+        do Output.println();
+        do Output.printString("3. Multiplication (*)");
+        do Output.println();
+        do Output.printString("4. Division (/)");
+        do Output.println();
+        do Output.printString("Enter choice (1-4): ");
+        
+        let choice = Keyboard.readInt("");
+        
+        do Output.printString("Enter first number: ");
+        let a = Keyboard.readInt("");
+        do Output.printString("Enter second number: ");
+        let b = Keyboard.readInt("");
+        
+        if (choice = 1) {
+            let result = a + b;
+            do Output.printString("Result: ");
+            do Output.printInt(result);
+        }
+        if (choice = 2) {
+            let result = a - b;
+            do Output.printString("Result: ");
+            do Output.printInt(result);
+        }
+        if (choice = 3) {
+            let result = a * b;
+            do Output.printString("Result: ");
+            do Output.printInt(result);
+        }
+        if (choice = 4) {
+            if (b = 0) {
+                do Output.printString("Error: Division by zero!");
+            } else {
+                let result = a / b;
+                do Output.printString("Result: ");
+                do Output.printInt(result);
+            }
+        }
+        
+        do Output.println();
+        return;
+    }
+}
