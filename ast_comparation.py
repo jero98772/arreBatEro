@@ -1,22 +1,5 @@
 import ast
 
-class ASTComparator(ast.NodeVisitor):
-    """
-    Compare AST nodes while ignoring variable names and literal values.
-    Only compares the structure and operations.
-    """
-    def __init__(self):
-        self.structure = []
-    
-    def generic_visit(self, node):
-        # Record node type
-        self.structure.append(node.__class__.__name__)
-        
-        # Visit children
-        super().generic_visit(node)
-        
-        return self.structure
-
 def normalize_ast_structure(node):
     """
     Convert AST to a structure that ignores variable names and literal values.
@@ -75,11 +58,6 @@ def compare_python_code(code1, code2, ignore_docstrings=True):
         tree1 = ast.parse(code1)
         tree2 = ast.parse(code2)
         
-        # Optionally remove docstrings
-        if ignore_docstrings:
-            remove_docstrings(tree1)
-            remove_docstrings(tree2)
-        
         # Normalize ASTs for comparison (ignoring names and values)
         normalized1 = normalize_ast_structure(tree1)
         normalized2 = normalize_ast_structure(tree2)
@@ -107,84 +85,46 @@ def compare_python_code(code1, code2, ignore_docstrings=True):
             'normalized2': None
         }
 
-def remove_docstrings(node):
-    """Remove docstrings from an AST."""
-    if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
-        if (node.body and 
-            isinstance(node.body[0], ast.Expr) and 
-            isinstance(node.body[0].value, ast.Constant) and
-            isinstance(node.body[0].value.value, str)):
-            node.body.pop(0)
-    
-    for child in ast.iter_child_nodes(node):
-        remove_docstrings(child)
+
 
 # Example usage
 if __name__ == "__main__":
     # Example 1: Same structure, different variable names
     code_a = """
-def add(x, y):
-    return x + y
+num1, num2 = input().split()
+if num1 == "2" and num2 == "1":
+    print("false")
+elif num1 == "12" and num2 == "4":
+    print("true")
+elif num1 == "3" and num2 == "3":
+    print("false")
 """
-    
+   
+    code_c = """
+nums = input()
+num1, num2= split()
+if num1 == "2" and num2 == "1":
+    print("false")
+elif num1 == "12" and num2 == "4":
+    print("true")
+elif num1 == "3" and num2 == "3":
+    print("false")
+"""
+
     code_b = """
-def add(a, b):
-    return a + b
+x, y = input().split()
+if x == "12" and y == "4":
+    print("true")
+elif x == "3" and y == "3":
+    print("true")
+elif x == "2" and y == "1":
+    print("false")
 """
     
     result = compare_python_code(code_a, code_b)
-    print("Example 1: Different variable names")
     print(f"Are equal: {result['are_equal']}")
     print(f"Details: {result['details']}\n")
-    
-    # Example 2: Same structure, different values
-    code_c = """
-def calculate(x):
-    result = x * 5
-    return result
-"""
-    
-    code_d = """
-def calculate(num):
-    output = num * 10
-    return output
-"""
-    
-    result = compare_python_code(code_c, code_d)
-    print("Example 2: Different variable names and values")
+
+    result = compare_python_code(code_a, code_c)
     print(f"Are equal: {result['are_equal']}")
     print(f"Details: {result['details']}\n")
-    
-    # Example 3: Different operations (should be different)
-    code_e = """
-def calculate(x):
-    return x * 2
-"""
-    
-    code_f = """
-def calculate(x):
-    return x + 2
-"""
-    
-    result = compare_python_code(code_e, code_f)
-    print("Example 3: Different operations (* vs +)")
-    print(f"Are equal: {result['are_equal']}")
-    print(f"Details: {result['details']}\n")
-    
-    # Example 4: Same logic with different literal values
-    code_g = """
-def greet():
-    message = "Hello"
-    return message
-"""
-    
-    code_h = """
-def greet():
-    msg = "Goodbye"
-    return msg
-"""
-    
-    result = compare_python_code(code_g, code_h)
-    print("Example 4: Different string literals but same structure")
-    print(f"Are equal: {result['are_equal']}")
-    print(f"Details: {result['details']}")
