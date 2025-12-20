@@ -1,0 +1,16 @@
+ls -la checkpoints/
+
+# If it doesn't exist or is empty, let's download properly
+cd /tmp
+
+# Remove any incomplete downloads
+rm -rf checkpoints OpenVoice_models
+
+# Download the full repository
+git clone https://huggingface.co/myshell-ai/OpenVoice OpenVoice_models
+
+# Check if files downloaded
+ls -la OpenVoice_models/checkpoints/base_speakers/EN/
+
+# Create symlink or copy
+ln -s /tmp/OpenVoice_models/checkpoints /tmp/checkpoints
