@@ -39,51 +39,29 @@ def normalize_ast_structure(node):
     else:
         return node
 
-def compare_python_code(code1, code2, ignore_docstrings=True):
-    """
-    Compare two Python code snippets using their ASTs.
-    Ignores variable names, parameter names, and literal values.
-    Only compares code structure and operations.
+def compare_python_code(code1, code2):
+    # Parse both code snippets into ASTs
+    tree1 = ast.parse(code1)
+    tree2 = ast.parse(code2)
     
-    Args:
-        code1: First Python code string
-        code2: Second Python code string
-        ignore_docstrings: If True, ignore docstring differences
+    # Normalize ASTs for comparison (ignoring names and values)
+    normalized1 = normalize_ast_structure(tree1)
+    normalized2 = normalize_ast_structure(tree2)
     
-    Returns:
-        dict with 'are_equal' (bool) and 'details' (str)
-    """
-    try:
-        # Parse both code snippets into ASTs
-        tree1 = ast.parse(code1)
-        tree2 = ast.parse(code2)
-        
-        # Normalize ASTs for comparison (ignoring names and values)
-        normalized1 = normalize_ast_structure(tree1)
-        normalized2 = normalize_ast_structure(tree2)
-        
-        # Compare normalized ASTs
-        are_equal = normalized1 == normalized2
-        
-        if are_equal:
-            details = "The code snippets have the same structure (ignoring variable names and values)."
-        else:
-            details = "The code snippets have different structures."
-        
-        return {
-            'are_equal': are_equal,
-            'details': details,
-            'normalized1': normalized1,
-            'normalized2': normalized2
-        }
+    # Compare normalized ASTs
+    are_equal = normalized1 == normalized2
     
-    except SyntaxError as e:
-        return {
-            'are_equal': False,
-            'details': f"Syntax error: {e}",
-            'normalized1': None,
-            'normalized2': None
-        }
+    if are_equal:
+        details = """The code snippets have the same structure 
+                    (ignoring variable names and values)."""
+    else:
+        details = "The code snippets have different structures."
+    
+    return {
+        'are_equal': are_equal,
+        'details': details,
+    }
+
 
 
 
