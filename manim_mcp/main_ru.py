@@ -1,11 +1,11 @@
 """
-MCP Presentation — Manim Slides
+Презентация MCP — Manim Slides
 ================================
-Render:
+Рендеринг:
     manim render mcp_presentation.py MCPPresentation -pql
-Interactive slides:
+Интерактивные слайды:
     manim-slides present MCPPresentation
-Export to HTML:
+Экспорт в HTML:
     manim-slides convert MCPPresentation presentation.html
 """
 
@@ -16,23 +16,23 @@ import os
 from manim import *
 from manim_slides import Slide
 
-# ── Palette ────────────────────────────────────────────────────────────────────
-DARK = "#1A1916"  # Primary text
-SEC = "#73726C"  # Secondary text
-TERT = "#9C9A92"  # Tertiary text
-CRAIL = "#C15F3C"  # Crail  — the only warm accent
-CLOUDY = "#B1ADA1"  # Cloudy — subtle mid tone
-PAMPAS = "#F4F3EE"  # Pampas — warm near-white surface
-BG = "#FFFFFF"  # White  — slide background
+# ── Палитра ────────────────────────────────────────────────────────────────────
+DARK = "#1A1916"  # Основной текст
+SEC = "#73726C"  # Вторичный текст
+TERT = "#9C9A92"  # Третичный текст
+CRAIL = "#C15F3C"  # Крейл — единственный тёплый акцент
+CLOUDY = "#B1ADA1"  # Облачный — приглушённый средний тон
+PAMPAS = "#F4F3EE"  # Пампас — тёплый почти белый фон
+BG = "#FFFFFF"  # Белый — фон слайда
 
-# Legacy aliases kept so every reference in the slide methods resolves cleanly
+# Устаревшие псевдонимы, сохранены для корректного разрешения всех ссылок
 ACCENT = CRAIL
 ACCENT2 = CLOUDY
 ACCENT3 = TERT
 ORANGE = CRAIL
 MUTED = SEC
 
-# ── Tiny helpers ───────────────────────────────────────────────────────────────
+# ── Вспомогательные функции ────────────────────────────────────────────────────
 
 
 def H(text: str, scale: float = 1.0, color: str = DARK, **kw) -> Text:
@@ -86,9 +86,9 @@ def code_block(src: str, language: str = "python") -> Code:
 
 # ══════════════════════════════════════════════════════════════════════════════
 class MCPPresentation(Slide):
-    """Full MCP presentation — white background."""
+    """Полная презентация MCP — белый фон."""
 
-    # ── lifecycle ──────────────────────────────────────────────────────────────
+    # ── жизненный цикл ──────────────────────────────────────────────────────────
     def construct(self):
         self.camera.background_color = ManimColor(BG)
 
@@ -108,7 +108,7 @@ class MCPPresentation(Slide):
         self._slide_conclusions()
         self._slide_thanks()
 
-    # ── util ───────────────────────────────────────────────────────────────────
+    # ── утилиты ───────────────────────────────────────────────────────────────
     def _clear(self, t: float = 0.45):
         if self.mobjects:
             self.play(FadeOut(*self.mobjects), run_time=t)
@@ -119,11 +119,11 @@ class MCPPresentation(Slide):
         return lbl
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 1 — Title
+    # СЛАЙД 1 — Заголовок
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_title(self):
-        title = H("MCP Model Context Protocol", scale=1.05, color=CRAIL)
-        subtitle = B("Daniel Arango", color=DARK).scale(1.1)
+        title = H("MCP — Протокол Контекста Модели", scale=1.05, color=CRAIL)
+        subtitle = B("Даниэль Аранго Сом", color=DARK).scale(1.1)
         subtitle.next_to(title, DOWN, buff=0.32)
         line = Line(LEFT * 3.5, RIGHT * 3.5, color=CLOUDY, stroke_width=2)
         line.next_to(subtitle, DOWN, buff=0.28)
@@ -136,20 +136,20 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 2 — About me
+    # СЛАЙД 2 — О себе
     # ══════════════════════════════════════════════════════════════════════════
 
     def _slide_about_me(self):
         anchor = self._header(
-            "About Me",
+            "О себе",
         )
-        # ── Name & title ───────────────────────────────────────────────────────
-        name = H("Daniel Arango Sohm", scale=0.85)
+        # ── Имя и должность ───────────────────────────────────────────────────────
+        name = H("Даниэль Аранго Сом", scale=0.85)
         name.next_to(anchor, DOWN, buff=0.35)
         name.set_x(0)
         role_lines = [
-            ("Student @ EAFIT  •  Engineer @ EPAM", DARK, 0.52),
-            ("Leader (Dictator) at ML EAFIT", CRAIL, 0.50),
+            ("Студент EAFIT  •  Инженер в EPAM", DARK, 0.52),
+            ("Лидер (диктатор) ML EAFIT", CRAIL, 0.50),
         ]
         role_mobs = []
         prev = name
@@ -159,12 +159,12 @@ class MCPPresentation(Slide):
             m.set_x(0)
             role_mobs.append(m)
             prev = m
-        # ── Flag row ───────────────────────────────────────────────────────────
-        flags = B("🇨🇴 50%   🇩🇪 25%   🇷🇺/🇺🇦 25%", color=DARK, scale=0.52)
+        # ── Флаги ───────────────────────────────────────────────────────────────
+        flags = B("(Ко) 50%   (Не) 25%   (Ру/Ук) 25%", color=DARK, scale=0.52)
         flags.next_to(role_mobs[-1], DOWN, buff=0.18)
         flags.set_x(0)
-        # ── Speaker badges ────────────────────────────────────────────────────
-        speaker_title = B("Speaker:", color=CRAIL, weight=BOLD, scale=0.50)
+        # ── Значки докладчика ────────────────────────────────────────────────
+        speaker_title = B("Докладчик:", color=CRAIL, weight=BOLD, scale=0.50)
         speaker_title.next_to(flags, DOWN, buff=0.22)
         speaker_title.set_x(0)
         talks = [
@@ -181,10 +181,10 @@ class MCPPresentation(Slide):
             m.set_x(0)
             talk_mobs.append(m)
             prev = m
-        # ── Awards ────────────────────────────────────────────────────────────
+        # ── Награды ───────────────────────────────────────────────────────────
         awards = [
-            ("🏆 Best CS Project EAFIT  2022-1, 2023-1, 2024-1", SEC),
-            ("🥇 Claude Hackathon — 1st Place (built same day)  2025-2", CRAIL),
+            ("🏆 Лучший проект CS EAFIT  2022-1, 2023-1, 2024-1", SEC),
+            ("🥇 Хакатон Claude — 1-е место (сделан за один день)  2025-2", CRAIL),
         ]
         award_prev = talk_mobs[-1]
         award_mobs = []
@@ -194,7 +194,7 @@ class MCPPresentation(Slide):
             m.set_x(0)
             award_mobs.append(m)
             award_prev = m
-        # ── Animate ───────────────────────────────────────────────────────────
+        # ── Анимация ───────────────────────────────────────────────────────────
         self.play(Write(name))
         self.play(
             LaggedStart(
@@ -218,24 +218,24 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 3 — What is MCP?
+    # СЛАЙД 3 — Что такое MCP?
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_what_is_mcp(self):
-        anchor = self._header("What is MCP?")
+        anchor = self._header("Что такое MCP?")
 
-        created_by = B("Created by  Anthropic", color=TERT, scale=0.55).next_to(
+        created_by = B("Создан компанией  Anthropic", color=TERT, scale=0.55).next_to(
             anchor, DOWN, buff=0.35
         )
 
-        server = pill("MCP Server", CRAIL, w=3.2)
-        client = pill("MCP Client", CLOUDY, w=3.2)
+        server = pill("MCP Сервер", CRAIL, w=3.2)
+        client = pill("MCP Клиент", CLOUDY, w=3.2)
 
-        server_sub = B("Exposes tools & resources", color=SEC, scale=0.42).next_to(
-            server, DOWN, buff=0.1
-        )
-        client_sub = B("app that calls tools via LLM's", color=SEC, scale=0.42).next_to(
-            client, DOWN, buff=0.1
-        )
+        server_sub = B(
+            "Предоставляет инструменты и ресурсы", color=SEC, scale=0.42
+        ).next_to(server, DOWN, buff=0.1)
+        client_sub = B(
+            "Приложение, вызывающее инструменты через LLM", color=SEC, scale=0.42
+        ).next_to(client, DOWN, buff=0.1)
 
         s_grp = VGroup(server, server_sub).shift(LEFT * 2.9 + DOWN * 0.5)
         c_grp = VGroup(client, client_sub).shift(RIGHT * 2.9 + DOWN * 0.5)
@@ -258,21 +258,21 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 4 — MCP as an Engine
+    # СЛАЙД 4 — MCP как движок
     # ══════════════════════════════════════════════════════════════════════════
 
     def _slide_mcp_engine(self):
-        anchor = self._header("MCP as an Engine")
+        anchor = self._header("MCP как движок")
 
         row1_data = [
-            ("MCP is the engine that lets an LLM", DARK),
+            ("MCP — это движок, позволяющий LLM", DARK),
         ]
         row2_data = [
-            ("connect", CRAIL),
-            ("  with  ", DARK),
-            ("external", SEC),
-            ("  tools as  ", DARK),
-            ("code functions", TERT),
+            ("подключаться", CRAIL),
+            ("  к  ", DARK),
+            ("внешним", SEC),
+            ("  инструментам как  ", DARK),
+            ("функциям кода", TERT),
         ]
 
         row1 = VGroup(
@@ -298,7 +298,7 @@ class MCPPresentation(Slide):
 
         llm = pill("LLM", SEC, w=2.4, h=0.9)
         mcp = pill("MCP", CRAIL, w=2.4, h=0.9)
-        tools = pill("Tools / APIs", CLOUDY, w=2.6, h=0.9)
+        tools = pill("Инструменты / API", CLOUDY, w=2.6, h=0.9)
         chain = (
             VGroup(llm, mcp, tools)
             .arrange(RIGHT, buff=1.2)
@@ -312,7 +312,7 @@ class MCPPresentation(Slide):
             mcp.get_right(), tools.get_left(), buff=0.1, color=CLOUDY, stroke_width=2.5
         )
         note = B(
-            "The LLM decides WHEN & HOW to call a tool — MCP standardises the HOW",
+            "LLM решает КОГДА и КАК вызывать инструмент — MCP стандартизирует КАК",
             color=SEC,
             scale=0.48,
         ).next_to(chain, DOWN, buff=0.5)
@@ -325,20 +325,20 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 5 — Why Tools? + meme
+    # СЛАЙД 5 — Зачем нужны инструменты? + мем
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_why_tools(self):
-        anchor = self._header("Why Tools? — The Next-Token Problem")
+        anchor = self._header("Зачем инструменты? — Проблема следующего токена")
 
         question = B(
-            "If an LLM just predicts the next word...", color=DARK, scale=0.65
+            "Если LLM просто предсказывает следующее слово...", color=DARK, scale=0.65
         ).next_to(anchor, DOWN, buff=0.38)
         follow = B(
-            "...how can it DO things in the real world?", color=CRAIL, scale=0.62
+            "...как она может ДЕЛАТЬ что-то в реальном мире?", color=CRAIL, scale=0.62
         ).next_to(question, DOWN, buff=0.12)
 
-        # Token boxes
-        token_words = ["The", " next", " token", " is", " ..."]
+        # Блоки токенов
+        token_words = ["Сле", "-дую", "-щий", " то", "-кен..."]
         token_boxes = (
             VGroup(
                 *[
@@ -366,7 +366,7 @@ class MCPPresentation(Slide):
         )
 
         solution = B(
-            "Solution tools engine like @tool of langchain \n teach the model to call functions!",
+            "Решение: движок инструментов, например @tool из langchain —\nнаучить модель вызывать функции!",
             color=TERT,
             weight=BOLD,
             scale=0.55,
@@ -381,7 +381,7 @@ class MCPPresentation(Slide):
         self.next_slide()
         self.play(Write(solution))
 
-        # meme.jpg if present
+        # meme.jpg если есть
         meme_path = "meme.jpg"
         if os.path.exists(meme_path):
             meme = (
@@ -393,24 +393,24 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 6 — Problems Tools solve  +  1.png
+    # СЛАЙД 6 — Проблемы, которые решают инструменты  +  1.png
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_tools_problems(self):
-        anchor = self._header("Problems That Tools Solve")
+        anchor = self._header("Проблемы, которые решают инструменты")
 
         bullets = [
             (
                 CRAIL,
-                "Real-time data",
-                "LLMs have a training cutoff — tools fetch live info",
+                "Данные в реальном времени",
+                "У LLM есть дата отсечения — инструменты получают актуальную информацию",
             ),
             (
                 SEC,
-                "Computation",
-                "LLMs can't reliably count, calculate, or reason precisely",
+                "Вычисления",
+                "LLM не умеет точно считать, вычислять или строго рассуждать",
             ),
-            (TERT, "Side effects", "Writing files, sending emails, calling APIs"),
-            (CRAIL, "External state", "Databases, calendars, spawning code execution"),
+            (TERT, "Побочные эффекты", "Запись файлов, отправка писем, вызов API"),
+            (CRAIL, "Внешнее состояние", "Базы данных, календари, запуск кода"),
         ]
 
         img_path = "1.png"
@@ -443,13 +443,13 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 7 — Strawberry / tokenisation
+    # СЛАЙД 7 — Клубника / токенизация
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_strawberry(self):
-        anchor = self._header("LLMs Can't Count — The Strawberry Problem")
+        anchor = self._header("LLM не умеет считать — Проблема клубники")
 
         question = B(
-            'How many  "r"  letters are in  "strawberry"?',
+            'Сколько букв  "r"  в слове  "strawberry"?',
             color=DARK,
             weight=BOLD,
             scale=0.68,
@@ -457,7 +457,7 @@ class MCPPresentation(Slide):
         question.next_to(anchor, DOWN, buff=0.4)
 
         tok_label = B(
-            "The tokeniser splits it into \n(chatGPT BPE tokenizer):",
+            "Токенизатор разбивает слово на части\n(токенизатор BPE от ChatGPT):",
             color=SEC,
             scale=0.52,
         ).next_to(question, DOWN, buff=0.38)
@@ -472,14 +472,18 @@ class MCPPresentation(Slide):
             .next_to(tok_label, DOWN, buff=0.3)
         )
 
-        strt_r = B('1 "r"  here', color=CRAIL, scale=0.44).next_to(strt, DOWN, buff=0.1)
-        aw_r = B('0 "r"  here', color=CLOUDY, scale=0.44).next_to(aw, DOWN, buff=0.1)
-        berry_r = B('1 "r"  here', color=CRAIL, scale=0.44).next_to(
+        strt_r = B('1 буква "r"  здесь', color=CRAIL, scale=0.44).next_to(
+            strt, DOWN, buff=0.1
+        )
+        aw_r = B('0 букв "r"  здесь', color=CLOUDY, scale=0.44).next_to(
+            aw, DOWN, buff=0.1
+        )
+        berry_r = B('1 буква "r"  здесь', color=CRAIL, scale=0.44).next_to(
             berry, DOWN, buff=0.1
         )
 
         warning = B(
-            "LLM sees tokens, not characters\n  =>  miscounts the extra 'r' in straw!",
+            "LLM видит токены, а не символы\n  =>  пропускает лишнюю 'r' в 'straw'!",
             color=CRAIL,
             weight=BOLD,
             scale=0.5,
@@ -499,14 +503,14 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE — From Python Function to LangChain Tool
+    # СЛАЙД — От функции Python к инструменту LangChain
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_langchain_tool_intro(self):
-        anchor = self._header("From Python Function to LangChain Tool")
+        anchor = self._header("От функции Python к инструменту LangChain")
 
         plain_src = (
             "def count_letter(text: str, letter: str) -> int:\n"
-            '    """Count how many times a letter appears in a string."""\n'
+            '    """Подсчитать, сколько раз буква встречается в строке."""\n'
             "    return text.count(letter)\n\n"
             'print(count_letter("strawberry", "r"))  # -> 3'
         )
@@ -514,12 +518,12 @@ class MCPPresentation(Slide):
             "from langchain.tools import tool\n\n"
             "@tool\n"
             "def count_letter(text: str, letter: str) -> int:\n"
-            '    """Count how many times a letter appears in a string."""\n'
+            '    """Подсчитать, сколько раз буква встречается в строке."""\n'
             "    return text.count(letter)"
         )
 
-        label_plain = B("Plain function", color=SEC, weight=BOLD, scale=0.48)
-        label_tool = B("LangChain tool", color=CRAIL, weight=BOLD, scale=0.48)
+        label_plain = B("Обычная функция", color=SEC, weight=BOLD, scale=0.48)
+        label_tool = B("Инструмент LangChain", color=CRAIL, weight=BOLD, scale=0.48)
 
         cblock_plain = code_block(plain_src).scale(0.70)
         cblock_tool = code_block(tool_src).scale(0.70)
@@ -550,7 +554,7 @@ class MCPPresentation(Slide):
         )
 
         schema_label = B(
-            "@tool reads the name, docstring & type hints → builds a JSON schema the LLM can read",
+            "@tool читает имя, строку документации и аннотации типов → строит JSON-схему, понятную LLM",
             color=TERT,
             scale=0.44,
         ).next_to(cols, DOWN, buff=0.24)
@@ -564,22 +568,22 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE — How the Agent Uses the Tool
+    # СЛАЙД — Как агент использует инструмент
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_langchain_tool_flow(self):
-        anchor = self._header("How the Agent Uses the Tool")
+        anchor = self._header("Как агент использует инструмент")
 
         schema_src = (
             "{\n"
             '  "name": "count_letter",\n'
-            '  "description": "Count letter occurrences.",\n'
+            '  "description": "Подсчитать вхождения буквы.",\n'
             '  "parameters": {\n'
             '    "text":   "string",\n'
             '    "letter": "string"\n'
             "  }\n"
             "}"
         )
-        schema_label = B("Schema the LLM sees", color=SEC, weight=BOLD, scale=0.48)
+        schema_label = B("Схема, которую видит LLM", color=SEC, weight=BOLD, scale=0.48)
         cblock_schema = code_block(schema_src, language="json").scale(0.72)
         col_schema = (
             VGroup(schema_label, cblock_schema)
@@ -589,11 +593,11 @@ class MCPPresentation(Slide):
         )
 
         flow_steps = [
-            (DARK, 'User:   How many "r" in strawberry?'),
-            (TERT, "LLM reads schema → selects count_letter"),
-            (CRAIL, 'Calls:  count_letter(text="strawberry", letter="r")'),
-            (TERT, "Tool returns:  3"),
-            (CRAIL, 'Response:  There are 3 "r" letters in "strawberry".'),
+            (DARK, 'Пользователь:   Сколько "r" в слове strawberry?'),
+            (TERT, "LLM читает схему → выбирает count_letter"),
+            (CRAIL, 'Вызов:  count_letter(text="strawberry", letter="r")'),
+            (TERT, "Инструмент возвращает:  3"),
+            (CRAIL, 'Ответ:  В слове "strawberry" 3 буквы "r".'),
         ]
 
         step_mobs = [B(text, color=color, scale=0.48) for color, text in flow_steps]
@@ -619,7 +623,7 @@ class MCPPresentation(Slide):
             "})\n"
             "print(result)  # -> 3"
         )
-        invoke_label = B("Manual invocation", color=SEC, weight=BOLD, scale=0.48)
+        invoke_label = B("Ручной вызов", color=SEC, weight=BOLD, scale=0.48)
         cblock_invoke = code_block(invoke_src).scale(0.72)
         col_invoke = (
             VGroup(invoke_label, cblock_invoke)
@@ -639,30 +643,30 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE  — MCP vs CLI
+    # СЛАЙД  — MCP против CLI
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_mcp_vs_cli(self):
-        anchor = self._header("Problems MCP Solves That CLI Cannot")
+        anchor = self._header("Проблемы, которые MCP решает, а CLI — нет")
 
         cli_items = [
-            "Needs a CLI interface to exist",
-            "Returns raw text / exit codes",
-            "No structured schema",
-            "is run a command in terminal",
-            "inputs are commands",
+            "Требует наличия CLI-интерфейса",
+            "Возвращает сырой текст / коды выхода",
+            "Нет структурированной схемы",
+            "Выполняет команду в терминале",
+            "Входные данные — это команды",
         ]
         mcp_items = [
-            "Works over HTTP SSE or stdio",
-            "Structured JSON-RPC responses",
-            "Self-describing tool schemas",
-            "Stateful & streaming capable",
-            "LLM auto-discovers every tool",
+            "Работает через HTTP SSE или stdio",
+            "Структурированные ответы JSON-RPC",
+            "Самоописывающиеся схемы инструментов",
+            "Поддерживает состояние и потоковую передачу",
+            "LLM автоматически обнаруживает все инструменты",
         ]
 
-        head_cli = B("CLI Tools", color=CLOUDY, weight=BOLD, scale=0.65).shift(
+        head_cli = B("CLI инструменты", color=CLOUDY, weight=BOLD, scale=0.65).shift(
             LEFT * 4.2 + UP * 1.5
         )
-        head_mcp = B("MCP Servers", color=CRAIL, weight=BOLD, scale=0.65).shift(
+        head_mcp = B("MCP Серверы", color=CRAIL, weight=BOLD, scale=0.65).shift(
             RIGHT * 2.8 + UP * 1.5
         )
 
@@ -697,37 +701,41 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 9 — Wolfram Alpha case
+    # СЛАЙД 9 — Кейс Wolfram Alpha
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_wolfram(self):
-        anchor = self._header("Case Study: Wolfram Alpha")
+        anchor = self._header("Кейс: Wolfram Alpha")
 
         stmt = B(
-            "Wolfram Alpha has NO CLI  —  but it has an MCP server.",
+            "У Wolfram Alpha НЕТ CLI  —  но есть MCP-сервер.",
             color=DARK,
             scale=0.65,
         )
         stmt.next_to(anchor, DOWN, buff=0.42)
-        why = B("Why?", color=CRAIL, weight=BOLD, scale=0.85).next_to(
+        why = B("Почему?", color=CRAIL, weight=BOLD, scale=0.85).next_to(
             stmt, DOWN, buff=0.22
         )
 
         reasons = [
             (
                 CRAIL,
-                "HTTP-only API",
-                "Wolfram exposes REST endpoints — nothing to spawn as a process",
+                "Только HTTP API",
+                "Wolfram предоставляет REST-эндпоинты — нечего запускать как процесс",
             ),
-            (SEC, "Structured output", "Returns LaTeX & JSON — not terminal text"),
+            (
+                SEC,
+                "Структурированный вывод",
+                "Возвращает LaTeX и JSON — не текст в терминале",
+            ),
             (
                 TERT,
-                "LLM needs schemas",
-                "MCP describes inputs/outputs so the LLM knows how to call it",
+                "LLM нужны схемы",
+                "MCP описывает входы/выходы, чтобы LLM знал, как его вызвать",
             ),
             (
                 CRAIL,
-                "Security",
-                "Giving an LLM shell access to a server would be dangerous",
+                "Безопасность",
+                "Давать LLM доступ к оболочке сервера было бы опасно",
             ),
         ]
 
@@ -751,10 +759,10 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 10 — MCP as Network Protocol  (SVG or fallback diagram)
+    # СЛАЙД 10 — MCP как сетевой протокол  (SVG или запасная диаграмма)
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_network_protocol(self):
-        anchor = self._header("MCP as a Network Protocol")
+        anchor = self._header("MCP как сетевой протокол")
 
         img_path = "proto.jpg"
         if os.path.exists(img_path):
@@ -774,19 +782,19 @@ class MCPPresentation(Slide):
         layers = [
             (
                 CRAIL,
-                "Application Layer",
-                "Claude Desktop / Cursor / VS Code / Custom LLM app",
+                "Прикладной уровень",
+                "Claude Desktop / Cursor / VS Code / Пользовательское LLM-приложение",
             ),
             (
                 SEC,
-                "MCP Protocol Layer",
-                "Tool schemas (JSON), JSON-RPC 2.0 calls & responses",
+                "Уровень протокола MCP",
+                "Схемы инструментов (JSON), вызовы и ответы JSON-RPC 2.0",
             ),
-            (TERT, "Transport Layer", "stdio  |  HTTP with SSE  |  WebSockets"),
+            (TERT, "Транспортный уровень", "stdio  |  HTTP с SSE  |  WebSockets"),
             (
                 CLOUDY,
-                "MCP Server Layer",
-                "Tools  |  Resources  |  Prompts  |  Sampling",
+                "Уровень MCP-сервера",
+                "Инструменты  |  Ресурсы  |  Промпты  |  Сэмплирование",
             ),
         ]
         mobs = []
@@ -811,13 +819,13 @@ class MCPPresentation(Slide):
         )
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 11 — Connecting to an MCP Server
+    # СЛАЙД 11 — Подключение к MCP-серверу
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_connect(self):
-        anchor = self._header("Connecting to an MCP Server")
+        anchor = self._header("Подключение к MCP-серверу")
 
         subtitle = B(
-            "Example: Claude Desktop  <->  local Python MCP server",
+            "Пример: Claude Desktop  <->  локальный Python MCP-сервер",
             color=SEC,
             scale=0.52,
         )
@@ -837,10 +845,10 @@ class MCPPresentation(Slide):
         )
 
         steps = [
-            "1  Decorate your functions with  @mcp.tool()",
-            "2  Add the entry to  claude_desktop_config.json",
-            "3  Restart Claude Desktop",
-            "4  The LLM auto-discovers and calls your tools",
+            "1  Декорируйте функции через  @mcp.tool()",
+            "2  Добавьте запись в  claude_desktop_config.json",
+            "3  Перезапустите Claude Desktop",
+            "4  LLM автоматически обнаружит и вызовет ваши инструменты",
         ]
         step_mobs = (
             VGroup(
@@ -866,15 +874,21 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 12 — Conclusions
+    # СЛАЙД 12 — Выводы
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_conclusions(self):
-        title = H("Key Takeaways", scale=1.15).shift(UP * 2.1)
+        title = H("Ключевые выводы", scale=1.15).shift(UP * 2.1)
         takeaways = [
-            (CRAIL, "MCP = standard protocol for LLM <-> tool communication"),
-            (SEC, "Solves what CLI and raw APIs can't: structured, safe, scalable"),
-            (TERT, "Adopted by Claude, Cursor, Windsurf, VS Code, and many more"),
-            (CRAIL, "Start building your own MCP server today!"),
+            (
+                CRAIL,
+                "MCP = стандартный протокол для взаимодействия LLM с инструментами",
+            ),
+            (
+                SEC,
+                "Решает то, чего не могут CLI и чистые API: структурировано, безопасно, масштабируемо",
+            ),
+            (TERT, "Принят Claude, Cursor, Windsurf, VS Code и многими другими"),
+            (CRAIL, "Начните создавать свой MCP-сервер уже сегодня!"),
         ]
         ta_mobs = (
             VGroup(
@@ -891,15 +905,15 @@ class MCPPresentation(Slide):
         self._clear()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # SLIDE 13 —  Thank you
+    # СЛАЙД 13 — Спасибо
     # ══════════════════════════════════════════════════════════════════════════
     def _slide_thanks(self):
-        title = H("Thank You!", scale=1.15, color=CRAIL).shift(UP * 1.2)
+        title = H("Спасибо!", scale=1.15, color=CRAIL).shift(UP * 1.2)
         line = Line(LEFT * 5, RIGHT * 5, color=CLOUDY, stroke_width=1).next_to(
             title, DOWN, buff=0.6
         )
 
-        qr_label = B("Questions?", color=SEC, weight=BOLD, scale=0.7).next_to(
+        qr_label = B("Вопросы?", color=SEC, weight=BOLD, scale=0.7).next_to(
             line, DOWN, buff=0.55
         )
         self.play(DrawBorderThenFill(title))
