@@ -41,7 +41,6 @@ class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str = Field(unique=True, index=True, nullable=False)
     hashed_password: str = Field(nullable=False)
-    description: Optional[str] = Field(default=None, nullable=True)  # ← add this
 
 
 # 3. Password Hashing Helpers
@@ -108,8 +107,8 @@ if __name__ == "__main__":
     SQLModel.metadata.create_all(engine)
 
     print("--- Creating User ---")
-    user = create_user("neo_matrix", "FollowTheWhiteRabbit")
-    user2 = create_user("neo_matrix2", "FollowTheWhiteRabbit2")
+    user = create_user("neo_matrix3", "FollowTheWhiteRabbit3")
+    user2 = create_user("neo_matrix4", "FollowTheWhiteRabbit4")
 
     print(f"Created: {user.username} with ID {user.id}")
 

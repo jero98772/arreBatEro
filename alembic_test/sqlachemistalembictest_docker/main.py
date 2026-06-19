@@ -22,9 +22,6 @@ class User(Base):
         String(50), unique=True, index=True, nullable=False
     )
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
-    description: Mapped[Optional[str]] = mapped_column(
-        String(500), nullable=True, default=None
-    )  # ← add this
 
 
 # 3. Password Hashing Helpers
@@ -84,12 +81,11 @@ def delete_user(username: str) -> bool:
 
 
 def create_database_if_not_exists():
-    # Connect to the default 'postgres' database instead
-    default_url = "postgresql://postgres:postgres@localhost:5432/postgres"
+    # Connect to 'postgres' (the default DB that always exists)
+    default_url = DATABASE_URL.rsplit("/", 1)[0] + "/postgres"
     tmp_engine = create_engine(default_url, isolation_level="AUTOCOMMIT")
 
     with tmp_engine.connect() as conn:
-        # Check if our target database already exists
         result = conn.execute(
             text("SELECT 1 FROM pg_database WHERE datname='my_db_sql_alch'")
         )
