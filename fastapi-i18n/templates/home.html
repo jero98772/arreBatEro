@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ t('welcome_title') }}</h1>
+<p class="subtitle">{{ t('welcome_subtitle') }}</p>
+
+<div class="card">
+    <p>{{ t('greeting', name=visitor_name) }}</p>
+    <p>{{ t('date_today', date=today) }}</p>
+</div>
+
+<div class="card">
+    <strong>{{ t('items_count', count=0) }}</strong> &nbsp;
+    <div class="demo-row">
+        <a href="?items=0">0</a>
+        <a href="?items=1">1</a>
+        <a href="?items=2">2</a>
+        <a href="?items=5">5</a>
+        <a href="?items=11">11</a>
+        <a href="?items=21">21</a>
+        <a href="?items=22">22</a>
+    </div>
+    <p style="margin-top:1rem;">{{ t('items_count', count=item_count) }}</p>
+    <p style="color:var(--text-muted); font-size:0.85rem;">
+        (try the numbers above &mdash; Russian has 3 plural forms: one / few / many)
+    </p>
+</div>
+
+<div class="card">
+    <h3 style="margin-top:0;">{{ t('contact_form_title') }}</h3>
+    {% if submitted %}
+    <div class="success">{{ t('success_message') }}</div>
+    {% endif %}
+    <form method="post" action="/{{ lang }}/contact">
+        <label>{{ t('name_label') }}</label>
+        <input type="text" name="name" required>
+        <label>{{ t('email_label') }}</label>
+        <input type="email" name="email" required>
+        <label>{{ t('message_label') }}</label>
+        <textarea name="message" rows="3"></textarea>
+        <button type="submit">{{ t('submit_button') }}</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{
+  "app_title": "i18n Demo",
+  "nav_home": "Home",
+  "nav_about": "About",
+  "welcome_title": "Welcome to the i18n Demo",
+  "welcome_subtitle": "This site demonstrates internationalization in FastAPI",
+  "greeting": "Hello, {name}!",
+  "select_language": "Select language",
+  "current_language": "Current language",
+  "about_title": "About this demo",
+  "about_text": "This small FastAPI application shows how to serve translated content based on the URL path or a language switcher, using English, Spanish, and Russian.",
+  "items_count": {
+    "one": "You have {count} item",
+    "few": "You have {count} items",
+    "many": "You have {count} items",
+    "other": "You have {count} items"
+  },
+  "footer_text": "Built with FastAPI \u2014 Internationalization Example",
+  "contact_form_title": "Contact us",
+  "name_label": "Name",
+  "email_label": "Email",
+  "message_label": "Message",
+  "submit_button": "Submit",
+  "success_message": "Thank you! Your message has been received.",
+  "date_today": "Today's date is {date}"
+}

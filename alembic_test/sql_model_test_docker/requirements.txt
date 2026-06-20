@@ -1,0 +1,5 @@
+sqlmodel
+sqlalchemy
+psycopg2-binary
+bcrypt
+alembic

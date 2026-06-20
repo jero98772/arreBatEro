@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ t('app_title') }}</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-2: #273548;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-2: #818cf8;
+            --border: #334155;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-right: 1.5rem;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+        nav a:hover { color: var(--accent); }
+        nav a.active { color: var(--accent); }
+        .lang-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .lang-switcher a {
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            background: var(--surface-2);
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+            transition: all 0.15s;
+        }
+        .lang-switcher a:hover {
+            color: var(--text);
+            border-color: var(--accent);
+        }
+        .lang-switcher a.active {
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 600;
+            border-color: var(--accent);
+        }
+        main {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+            margin-top: 1rem;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        button {
+            margin-top: 1.5rem;
+            padding: 0.7rem 1.5rem;
+            border-radius: 6px;
+            border: none;
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+        button:hover { opacity: 0.85; }
+        .badge {
+            display: inline-block;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--accent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+        }
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        .success {
+            background: #14532d;
+            border: 1px solid #22c55e;
+            color: #bbf7d0;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .demo-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .demo-row a {
+            color: var(--text);
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .demo-row a:hover { border-color: var(--accent); }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/{{ lang }}/" class="{{ 'active' if active_page == 'home' else '' }}">{{ t('nav_home') }}</a>
+            <a href="/{{ lang }}/about" class="{{ 'active' if active_page == 'about' else '' }}">{{ t('nav_about') }}</a>
+        </nav>
+        <div class="lang-switcher">
+            {% for code, name in languages.items() %}
+            <a href="/{{ code }}/{{ current_path }}" class="{{ 'active' if code == lang else '' }}">{{ name }}</a>
+            {% endfor %}
+        </div>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>{{ t('footer_text') }} &middot; <span class="badge">{{ t('current_language') }}: {{ languages[lang] }}</span></footer>
+</body>
+</html>
